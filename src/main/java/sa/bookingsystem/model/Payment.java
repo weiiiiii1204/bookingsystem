@@ -17,7 +17,12 @@ public class Payment {
         this.amount = amount;
         this.method = "CREDIT_CARD";
         
-        // 模擬驗證與扣款：金額 > 0 即視為成功
+        //假設隨機30%的機率會失敗
+        if (Math.random() < 0.3) {
+            this.isSuccessful = false;
+            return; 
+        }
+   
         if (amount > 0) {
             this.isSuccessful = true;
         } else {

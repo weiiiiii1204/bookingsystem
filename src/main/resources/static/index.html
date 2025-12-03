@@ -224,7 +224,7 @@
             })
             .then(res => {
                 if(res.ok) return res.json();
-                throw new Error('預訂失敗');
+                throw new Error('付款失敗，請重新付款');
             })
             .then(data => {
                 alert(`成功預訂 ${data.length} 間房間！`);
