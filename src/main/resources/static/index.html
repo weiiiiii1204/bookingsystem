@@ -6,15 +6,14 @@
     <title>飯店訂房系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { padding-top: 20px; padding-bottom: 80px; } /* 底部留白給結帳列 */
+        body { padding-top: 20px; padding-bottom: 80px; }
         .room-card { margin-bottom: 20px; transition: transform 0.2s; }
         .room-card:hover { transform: translateY(-5px); }
         
-        /* 已售完樣式 */
         .sold-out-card {
             opacity: 0.6;
             filter: grayscale(100%);
-            pointer-events: none; /* 禁止點擊 */
+            pointer-events: none;
             position: relative;
         }
         .sold-out-badge {
@@ -96,8 +95,18 @@
                     <label class="form-label">信用卡號 (模擬)</label>
                     <input type="text" class="form-control" value="4000-1234-5678-9010" readonly>
                 </div>
-                <button type="submit" class="btn btn-success w-100 btn-lg">確認付款</button>
-                <button type="button" class="btn btn-secondary w-100 mt-2" onclick="cancelBooking()">返回</button>
+
+                <!-- 新增：付款進度條 (預設隱藏) -->
+                <div id="payment-progress-container" class="mb-3" style="display: none;">
+                    <label class="form-label text-primary">正在處理付款交易...</label>
+                    <div class="progress" style="height: 25px;">
+                        <div id="payment-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                             role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
+                <button type="submit" id="confirmBtn" class="btn btn-success w-100 btn-lg">確認付款</button>
+                <button type="button" id="backBtn" class="btn btn-secondary w-100 mt-2" onclick="cancelBooking()">返回</button>
             </form>
         </section>
     </div>
@@ -121,10 +130,10 @@
                     document.getElementById('room-container').style.display = 'block';
                     selectedRooms = [];
                     updateCheckoutBar();
-                });
+                })
+                .catch(err => alert('搜尋錯誤: ' + err));
         });
 
-        // 渲染房間卡片
         function renderRooms(rooms, elementId, isBooked) {
             const container = document.getElementById(elementId);
             container.innerHTML = '';
@@ -137,8 +146,6 @@
             rooms.forEach(room => {
                 const badge = isBooked ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
                 const cardClass = isBooked ? 'card h-100 sold-out-card' : 'card h-100 border-primary';
-                
-                // Checkbox 只有在未預訂時顯示
                 const checkboxHtml = !isBooked ? 
                     `<div class="form-check position-absolute top-0 end-0 m-2">
                         <input class="form-check-input" type="checkbox" style="transform: scale(1.5);"
@@ -162,7 +169,6 @@
             });
         }
 
-        // 勾選/取消房間
         function toggleRoom(id, price, checkbox) {
             if (checkbox.checked) {
                 selectedRooms.push({ id, price });
@@ -177,7 +183,6 @@
             if (selectedRooms.length > 0) {
                 bar.style.display = 'block';
                 document.getElementById('selected-count').innerText = selectedRooms.length;
-                // 計算總價
                 const total = selectedRooms.reduce((sum, r) => sum + r.price, 0);
                 document.getElementById('total-price').innerText = total;
             } else {
@@ -185,7 +190,6 @@
             }
         }
 
-        // 顯示結帳頁
         function showBookingForm() {
             const ids = selectedRooms.map(r => r.id).join(', ');
             document.getElementById('selectedRoomInfo').innerText = `您即將預訂房號: ${ids}`;
@@ -202,10 +206,25 @@
             updateCheckoutBar();
         }
 
-        // 送出訂單
+        // 修改：將送出邏輯獨立出來，確保作用域正確
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            console.log("表單提交觸發，開始處理付款流程...");
             
+            // 1. 取得 UI 元素
+            const confirmBtn = document.getElementById('confirmBtn');
+            const backBtn = document.getElementById('backBtn');
+            const progressContainer = document.getElementById('payment-progress-container');
+            const progressBar = document.getElementById('payment-progress-bar');
+
+            // 2. 切換狀態：隱藏按鈕，顯示進度條
+            confirmBtn.style.display = 'none';
+            backBtn.style.display = 'none';
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.innerText = '0%';
+
+            // 3. 準備資料
             const req = {
                 roomIds: selectedRooms.map(r => r.id),
                 checkIn: document.getElementById('checkInDate').value,
@@ -217,20 +236,54 @@
                 }
             };
 
-            fetch(`${API_BASE_URL}/reserve`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(req)
-            })
-            .then(res => {
-                if(res.ok) return res.json();
-                throw new Error('付款失敗，請重新付款');
-            })
-            .then(data => {
-                alert(`成功預訂 ${data.length} 間房間！`);
-                location.reload();
-            })
-            .catch(err => alert(err));
+            // 4. 開始假裝跑進度條 (模擬銀行連線)
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 10) + 5; // 隨機增加進度
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                progressBar.innerText = progress + '%';
+
+                // 5. 進度跑到 100% 後，才真正發送 API
+                if (progress === 100) {
+                    clearInterval(interval);
+                    
+                    // 稍微停頓一下讓使用者看到 100%
+                    setTimeout(() => {
+                        console.log("進度條完成，發送 API 請求...");
+                        
+                        fetch(`${API_BASE_URL}/reserve`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(req)
+                        })
+                        .then(res => {
+                            if(res.ok) return res.json();
+                            // 這裡會接到後端 Payment Failed (30% 機率)
+                            throw new Error('付款失敗，請重新付款');
+                        })
+                        .then(data => {
+                            alert(`付款成功！已建立 ${data.length} 張訂單。`);
+                            location.reload();
+                        })
+                        .catch(err => {
+                            // 失敗時的處理
+                            console.error("API 錯誤:", err);
+                            alert(err.message);
+                            
+                            // 恢復 UI 狀態讓使用者重試 (重要！)
+                            progressContainer.style.display = 'none';
+                            confirmBtn.style.display = 'block';
+                            backBtn.style.display = 'block';
+                            // 重置進度條
+                            progressBar.style.width = '0%';
+                            progressBar.innerText = '0%';
+                        });
+
+                    }, 500);
+                }
+            }, 100); // 每 0.1 秒跑一次
         });
     </script>
 </body>
