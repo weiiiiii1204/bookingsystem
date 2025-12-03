@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飯店訂房系統</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 20px; padding-bottom: 80px; } /* 底部留白給結帳列 */
+        .room-card { margin-bottom: 20px; transition: transform 0.2s; }
+        .room-card:hover { transform: translateY(-5px); }
+        
+        /* 已售完樣式 */
+        .sold-out-card {
+            opacity: 0.6;
+            filter: grayscale(100%);
+            pointer-events: none; /* 禁止點擊 */
+            position: relative;
+        }
+        .sold-out-badge {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            border: 3px solid #dc3545;
+            color: #dc3545;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 5px;
+            z-index: 10;
+            background: rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex justify-content-center py-3 mb-4 border-bottom">
+            <h1>飯店訂房系統</h1>
+        </header>
+
+        <!-- 搜尋 -->
+        <section id="search-section" class="mb-5 p-4 bg-light rounded shadow-sm">
+            <h3>查詢空房</h3>
+            <form id="searchForm" class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label">入住日期</label>
+                    <input type="date" class="form-control" id="checkInDate" required>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">退房日期</label>
+                    <input type="date" class="form-control" id="checkOutDate" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">搜尋</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 房間列表 -->
+        <div id="room-container" style="display: none;">
+            <h4 class="mb-3">可預訂房間</h4>
+            <div id="available-list" class="row mb-4"></div>
+            
+            <h4 class="mb-3 text-secondary">已售完房間</h4>
+            <div id="booked-list" class="row"></div>
+        </div>
+
+        <!-- 底部結帳列 -->
+        <nav class="navbar fixed-bottom navbar-light bg-white border-top shadow-lg" id="checkout-bar" style="display: none;">
+            <div class="container">
+                <span class="h5 mb-0">已選擇 <span id="selected-count" class="text-primary fw-bold">0</span> 間</span>
+                <span class="h4 mb-0 text-danger fw-bold">$<span id="total-price">0</span> <small class="text-muted fs-6">/每晚</small></span>
+                <button class="btn btn-success btn-lg" onclick="showBookingForm()">前往結帳</button>
+            </div>
+        </nav>
+
+        <!-- 預訂表單 -->
+        <section id="booking-section" class="mb-5 p-4 bg-light rounded shadow-sm" style="display: none;">
+            <h3>填寫預訂資料</h3>
+            <div class="alert alert-info" id="selectedRoomInfo"></div>
+            <form id="bookingForm">
+                <div class="mb-3">
+                    <label class="form-label">姓名</label>
+                    <input type="text" class="form-control" id="customerName" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">電話</label>
+                    <input type="tel" class="form-control" id="customerPhone" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="customerEmail" required>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label">信用卡號 (模擬)</label>
+                    <input type="text" class="form-control" value="4000-1234-5678-9010" readonly>
+                </div>
+                <button type="submit" class="btn btn-success w-100 btn-lg">確認付款</button>
+                <button type="button" class="btn btn-secondary w-100 mt-2" onclick="cancelBooking()">返回</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api/booking';
+        let selectedRooms = [];
+
+        // 搜尋
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const checkIn = document.getElementById('checkInDate').value;
+            const checkOut = document.getElementById('checkOutDate').value;
+
+            fetch(`${API_BASE_URL}/rooms?checkIn=${checkIn}&checkOut=${checkOut}`)
+                .then(res => res.json())
+                .then(data => {
+                    renderRooms(data.availableRooms, 'available-list', false);
+                    renderRooms(data.bookedRooms, 'booked-list', true);
+                    
+                    document.getElementById('room-container').style.display = 'block';
+                    selectedRooms = [];
+                    updateCheckoutBar();
+                });
+        });
+
+        // 渲染房間卡片
+        function renderRooms(rooms, elementId, isBooked) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            if (rooms.length === 0) {
+                container.innerHTML = '<p class="text-muted col-12">無資料</p>';
+                return;
+            }
+
+            rooms.forEach(room => {
+                const badge = isBooked ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
+                const cardClass = isBooked ? 'card h-100 sold-out-card' : 'card h-100 border-primary';
+                
+                // Checkbox 只有在未預訂時顯示
+                const checkboxHtml = !isBooked ? 
+                    `<div class="form-check position-absolute top-0 end-0 m-2">
+                        <input class="form-check-input" type="checkbox" style="transform: scale(1.5);"
+                               onchange="toggleRoom('${room.roomId}', ${room.price}, this)">
+                     </div>` : '';
+
+                const html = `
+                    <div class="col-md-4 room-card">
+                        <div class="${cardClass}">
+                            ${badge}
+                            ${checkboxHtml}
+                            <div class="card-body">
+                                <h5 class="card-title">${room.type}</h5>
+                                <p class="card-text mb-1">房號: ${room.roomId}</p>
+                                <h4 class="text-primary">$${room.price}</h4>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // 勾選/取消房間
+        function toggleRoom(id, price, checkbox) {
+            if (checkbox.checked) {
+                selectedRooms.push({ id, price });
+            } else {
+                selectedRooms = selectedRooms.filter(r => r.id !== id);
+            }
+            updateCheckoutBar();
+        }
+
+        function updateCheckoutBar() {
+            const bar = document.getElementById('checkout-bar');
+            if (selectedRooms.length > 0) {
+                bar.style.display = 'block';
+                document.getElementById('selected-count').innerText = selectedRooms.length;
+                // 計算總價
+                const total = selectedRooms.reduce((sum, r) => sum + r.price, 0);
+                document.getElementById('total-price').innerText = total;
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+
+        // 顯示結帳頁
+        function showBookingForm() {
+            const ids = selectedRooms.map(r => r.id).join(', ');
+            document.getElementById('selectedRoomInfo').innerText = `您即將預訂房號: ${ids}`;
+            document.getElementById('booking-section').style.display = 'block';
+            document.getElementById('room-container').style.display = 'none';
+            document.getElementById('search-section').style.display = 'none';
+            document.getElementById('checkout-bar').style.display = 'none';
+        }
+
+        function cancelBooking() {
+            document.getElementById('booking-section').style.display = 'none';
+            document.getElementById('room-container').style.display = 'block';
+            document.getElementById('search-section').style.display = 'block';
+            updateCheckoutBar();
+        }
+
+        // 送出訂單
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const req = {
+                roomIds: selectedRooms.map(r => r.id),
+                checkIn: document.getElementById('checkInDate').value,
+                checkOut: document.getElementById('checkOutDate').value,
+                customer: {
+                    name: document.getElementById('customerName').value,
+                    phone: document.getElementById('customerPhone').value,
+                    email: document.getElementById('customerEmail').value
+                }
+            };
+
+            fetch(`${API_BASE_URL}/reserve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(req)
+            })
+            .then(res => {
+                if(res.ok) return res.json();
+                throw new Error('預訂失敗');
+            })
+            .then(data => {
+                alert(`成功預訂 ${data.length} 間房間！`);
+                location.reload();
+            })
+            .catch(err => alert(err));
+        });
+    </script>
+</body>
+</html>

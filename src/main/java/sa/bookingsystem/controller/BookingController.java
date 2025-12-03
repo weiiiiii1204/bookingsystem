@@ -1,7 +1,6 @@
 package sa.bookingsystem.controller;
 
 import sa.bookingsystem.model.Reservation;
-import sa.bookingsystem.model.Room;
 import sa.bookingsystem.service.BookingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +16,20 @@ public class BookingController {
     @Autowired
     private BookingSystem bookingSystem;
 
+    // 修改: 回傳型態改為 RoomSearchResult
     @GetMapping("/rooms")
-    public List<Room> searchRooms(
+    public RoomSearchResult searchRooms(
             @RequestParam LocalDate checkIn,
             @RequestParam LocalDate checkOut) {
         return bookingSystem.searchAvailableRooms(checkIn, checkOut);
     }
 
+    // 修改: 接收 roomIds 並回傳 List<Reservation>
     @PostMapping("/reserve")
-    public Reservation createReservation(@RequestBody BookingRequest request) {
+    public List<Reservation> createReservation(@RequestBody BookingRequest request) {
+        // 直接呼叫 Service，完全沒有 Customer 的行為方法呼叫
         return bookingSystem.createReservation(
-                request.getRoomId(),
+                request.getRoomIds(),
                 request.getCustomer(),
                 request.getCheckIn(),
                 request.getCheckOut()
