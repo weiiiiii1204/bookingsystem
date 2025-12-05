@@ -1,5 +1,6 @@
 package sa.bookingsystem.controller;
 
+import sa.bookingsystem.model.Customer;
 import sa.bookingsystem.model.Reservation;
 import sa.bookingsystem.service.BookingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class BookingController {
     @PostMapping("/reserve")
     public List<Reservation> createReservation(@RequestBody BookingRequest request) {
         // 直接呼叫 Service，完全沒有 Customer 的行為方法呼叫
+        Customer customer = request.getCustomer();
+        
+        customer.provideDetails(customer.getName(), customer.getPhone(), customer.getEmail());
+
         return bookingSystem.createReservation(
                 request.getRoomIds(),
                 request.getCustomer(),

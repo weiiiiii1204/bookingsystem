@@ -55,11 +55,6 @@ public class BookingSystem {
                     .filter(r -> r.getRoomId().equals(roomId))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("找不到房間 ID: " + roomId));
-            
-            // 防呆：檢查是否被搶先預訂
-            if (!"AVAILABLE".equalsIgnoreCase(targetRoom.getStatus())) {
-                throw new RuntimeException("房間 " + targetRoom.getType() + " (" + roomId + ") 稍早一步已被搶走！");
-            }
 
             selectedRooms.add(targetRoom);
             grandTotalAmount += calculateTotalAmount(targetRoom, checkIn, checkOut);
