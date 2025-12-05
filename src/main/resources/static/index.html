@@ -3,213 +3,580 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>飯店訂房系統</title>
+    <title>No.17 White Hotel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
     <style>
-        body { padding-top: 20px; padding-bottom: 80px; } /* 底部留白給結帳列 */
-        .room-card { margin-bottom: 20px; transition: transform 0.2s; }
-        .room-card:hover { transform: translateY(-5px); }
-        
-        /* 已售完樣式 */
-        .sold-out-card {
-            opacity: 0.6;
-            filter: grayscale(100%);
-            pointer-events: none; /* 禁止點擊 */
-            position: relative;
+        :root {
+            --primary-black: #222222;
+            --bg-light: #F9F9F9;
+            --white: #FFFFFF;
+            --border-color: #E0E0E0;
         }
-        .sold-out-badge {
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--primary-black);
+            background-color: var(--white);
+        }
+
+        /* --- 頂部導航 (透明、置中) --- */
+        .navbar {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            border: 3px solid #dc3545;
-            color: #dc3545;
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 5px 15px;
-            border-radius: 5px;
-            z-index: 10;
-            background: rgba(255,255,255,0.8);
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding-top: 25px;
         }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            margin: 0 15px;
+            transition: opacity 0.3s;
+        }
+        .nav-link:hover { opacity: 0.7; }
+
+        /* --- Hero Section (Laguna Layout) --- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            /* 背景圖：保持 White Space 風格的冷色調 */
+            background-image: url('/images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.35); /* 稍微加深遮罩以突出文字 */
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Logo Box */
+        .brand-logo {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-logo .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;  /* 數字放大 */
+            font-weight: 400; /* 讓字體輕盈一點 */
+            line-height: 0.8;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .brand-logo .prefix {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            position: absolute;
+            top: 5px;
+            left: -20px; /* 將 No. 懸掛在左側 */
+        }
+
+        .brand-logo .text {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 6px; /* 寬間距營造高級感 */
+            text-transform: uppercase;
+            display: block;
+            border-top: 1px solid rgba(255,255,255,0.5); /* 上方細線 */
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* --- 搜尋懸浮條 (日曆優化版) --- */
+        .search-bar-container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px 25px;       /* 內距稍微調小 */
+        width: auto;              /* 寬度自動 */
+        min-width: auto;          /* 移除原本的 600px 限制 */
+        max-width: 500px;         /* 設定一個最大寬度，避免太長 */
+        margin: 0 auto;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        border-radius: 0;
+        display: flex;
+        align-items: flex-end;
+        gap: 15px;
+    }
+
+        /* 客製化日曆樣式 (模仿參考圖) */
+        .flatpickr-calendar {
+            font-family: 'Playfair Display', serif !important; /* 日曆使用襯線體 */
+            border-radius: 0 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            border: none !important;
+        }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day:hover, .flatpickr-day:focus {
+            background: #444 !important; /* 深灰色圓圈 */
+            border-color: #444 !important;
+            color: #fff !important;
+            border-radius: 50% !important; /* 強制圓形 */
+        }
+        .flatpickr-day.inRange {
+            box-shadow: -5px 0 0 #e6e6e6, 5px 0 0 #e6e6e6 !important;
+            background: #e6e6e6 !important;
+            border-color: #e6e6e6 !important;
+            color: #333 !important;
+        }
+        .flatpickr-month {
+            color: #000 !important;
+            fill: #000 !important;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: bold;
+        }
+
+        /* 輸入框樣式 */
+        .date-input-group {
+            flex-grow: 1;
+        }
+        .form-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 700;
+        }
+        .custom-date-input {
+        border: none;
+        border-bottom: 2px solid #ddd;
+        background: transparent;
+        width: 250px;             /* 直接指定一個較小的寬度 (例如 250px) */
+        padding: 5px 0;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;        /* 字體稍微調小 */
+        color: #333;
+        cursor: pointer;
+        text-align: center;       /* 讓日期文字置中看起來更平衡 */
+        }
+        .custom-date-input:focus {
+            outline: none;
+            border-bottom-color: #000;
+        }
+
+        .btn-search {
+            background-color: var(--primary-black);
+            color: #fff;
+            border: none;
+            padding: 12px 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            height: 55px; /* 與輸入框對齊 */
+            border-radius: 0;
+            transition: all 0.3s;
+        }
+        .btn-search:hover { background-color: #555; }
+
+        /* --- 房間列表區塊 --- */
+        #room-section {
+            padding: 100px 0;
+            background-color: var(--white);
+            display: none; /* 搜尋前隱藏 */
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 3px;
+            font-size: 2rem;
+        }
+
+        /* 房型卡片設計 (White Space 風格) */
+        .room-card {
+            background: #fff;
+            margin-bottom: 50px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .room-card:hover {
+            border-color: #eee;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        .room-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 300px; /* 圖片高度增加 */
+        }
+        .room-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            filter: grayscale(10%);
+        }
+        .room-card:hover .room-img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .room-content {
+            padding: 25px 10px 10px 10px;
+        }
+        .room-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: 'Playfair Display', serif;
+        }
+        .room-price-tag {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #000;
+            text-align: right;
+        }
+        
+        /* 設施圖示列 */
+        .amenities-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 25px 0;
+            display: flex;
+            gap: 15px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        .amenities-list li {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 預訂按鈕 (直接在卡片上) */
+        .btn-book-now {
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            border-radius: 0;
+            transition: background 0.3s;
+        }
+        .btn-book-now:hover {
+            background-color: #333;
+        }
+
+        /* --- 新版預訂 Modal (左右分割設計) --- */
+        .modal-content {
+            border-radius: 0;
+            border: none;
+            overflow: hidden;
+        }
+        .modal-body {
+            padding: 0;
+        }
+        .booking-summary-col {
+            background-color: #f8f8f8;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .booking-form-col {
+            padding: 40px;
+            background-color: #fff;
+        }
+        
+        .summary-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            filter: grayscale(20%);
+        }
+        .summary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .summary-dates {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .summary-total {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Modal Form Styles */
+        .modal-form-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .modal-form-input {
+            border: none;
+            border-bottom: 1px solid #ddd;
+            border-radius: 0;
+            padding: 10px 0;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .modal-form-input:focus {
+            box-shadow: none;
+            border-bottom: 1px solid #000;
+        }
+        .btn-confirm {
+            background-color: #000;
+            color: #fff;
+            width: 100%;
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 0;
+            margin-top: 10px;
+        }
+        .btn-confirm:hover { background-color: #333; }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="d-flex justify-content-center py-3 mb-4 border-bottom">
-            <h1>飯店訂房系統</h1>
-        </header>
 
-        <!-- 搜尋 -->
-        <section id="search-section" class="mb-5 p-4 bg-light rounded shadow-sm">
-            <h3>查詢空房</h3>
-            <form id="searchForm" class="row g-3">
-                <div class="col-md-5">
-                    <label class="form-label">入住日期</label>
-                    <input type="date" class="form-control" id="checkInDate" required>
-                </div>
-                <div class="col-md-5">
-                    <label class="form-label">退房日期</label>
-                    <input type="date" class="form-control" id="checkOutDate" required>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">搜尋</button>
-                </div>
-            </form>
-        </section>
+    <nav class="navbar navbar-expand justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Rooms</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+    </nav>
 
-        <!-- 房間列表 -->
-        <div id="room-container" style="display: none;">
-            <h4 class="mb-3">可預訂房間</h4>
-            <div id="available-list" class="row mb-4"></div>
-            
-            <h4 class="mb-3 text-secondary">已售完房間</h4>
-            <div id="booked-list" class="row"></div>
-        </div>
-
-        <!-- 底部結帳列 -->
-        <nav class="navbar fixed-bottom navbar-light bg-white border-top shadow-lg" id="checkout-bar" style="display: none;">
-            <div class="container">
-                <span class="h5 mb-0">已選擇 <span id="selected-count" class="text-primary fw-bold">0</span> 間</span>
-                <span class="h4 mb-0 text-danger fw-bold">$<span id="total-price">0</span> <small class="text-muted fs-6">/每晚</small></span>
-                <button class="btn btn-success btn-lg" onclick="showBookingForm()">前往結帳</button>
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content container">
+            <div class="brand-logo">
+                <span class="prefix">No.</span>
+                <span class="number">17</span>
+                <span class="text">White Hotel</span>
             </div>
-        </nav>
-
-        <!-- 預訂表單 -->
-        <section id="booking-section" class="mb-5 p-4 bg-light rounded shadow-sm" style="display: none;">
-            <h3>填寫預訂資料</h3>
-            <div class="alert alert-info" id="selectedRoomInfo"></div>
-            <form id="bookingForm">
-                <div class="mb-3">
-                    <label class="form-label">姓名</label>
-                    <input type="text" class="form-control" id="customerName" required>
+            <form id="searchForm">
+                <div class="search-bar-container">
+                    <div class="date-input-group">
+                        <label class="form-label">Check-in — Check-out</label>
+                        <input type="text" id="dateRange" class="custom-date-input" placeholder="Select Dates" required>
+                    </div>
+                    <button type="submit" class="btn btn-search">Search</button>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">電話</label>
-                    <input type="tel" class="form-control" id="customerPhone" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="customerEmail" required>
-                </div>
-                <hr>
-                <div class="mb-3">
-                    <label class="form-label">信用卡號 (模擬)</label>
-                    <input type="text" class="form-control" value="4000-1234-5678-9010" readonly>
-                </div>
-                <button type="submit" class="btn btn-success w-100 btn-lg">確認付款</button>
-                <button type="button" class="btn btn-secondary w-100 mt-2" onclick="cancelBooking()">返回</button>
             </form>
-        </section>
+        </div>
+    </header>
+
+    <section id="room-section">
+        <div class="container">
+            <div class="section-header">
+                <h3>Select Your Sanctuary</h3>
+                <p class="text-muted">Best available rates</p>
+            </div>
+            <div id="room-list-container" class="row">
+                </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl"> <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row g-0">
+                        <div class="col-md-5 booking-summary-col">
+                            <img src="" id="modal-img" class="summary-img">
+                            <h4 id="modal-title" class="summary-title">Room Name</h4>
+                            <div id="modal-dates" class="summary-dates">Dec 01 - Dec 05</div>
+                            <div class="d-flex justify-content-between align-items-end mt-4">
+                                <span class="text-muted">Total Price</span>
+                                <span id="modal-price" class="summary-total">$0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-7 booking-form-col">
+                            <div class="d-flex justify-content-between mb-5">
+                                <h4 class="fw-bold" style="font-family: 'Playfair Display', serif;">Guest Details</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
+                            <form id="bookingForm">
+                                <div class="mb-3">
+                                    <label class="modal-form-label">Full Name</label>
+                                    <input type="text" class="form-control modal-form-input" id="customerName" placeholder="Enter your name" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="modal-form-label">Phone Number</label>
+                                        <input type="tel" class="form-control modal-form-input" id="customerPhone" placeholder="09xx-xxx-xxx" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="modal-form-label">Email Address</label>
+                                        <input type="email" class="form-control modal-form-input" id="customerEmail" placeholder="name@example.com" required>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-confirm mt-4">Confirm Reservation</button>
+                                <p class="text-center text-muted mt-3 small">Payment will be processed at the hotel.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         const API_BASE_URL = 'http://localhost:8080/api/booking';
-        let selectedRooms = [];
+        let currentRoom = null;
+        let selectedDates = [];
 
-        // 搜尋
+        // 1. 初始化 Flatpickr 日曆
+        flatpickr("#dateRange", {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            showMonths: 1,
+            // 這些 class 設定是為了配合上面寫的 CSS，做出參考圖的圓圈效果
+            onClose: function(selectedDates, dateStr, instance) {
+                // 可以在這裡做選擇後的處理
+            }
+        });
+
+        // 2. 搜尋房間
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const checkIn = document.getElementById('checkInDate').value;
-            const checkOut = document.getElementById('checkOutDate').value;
+            
+            // 取得 Flatpickr 的值
+            const dateStr = document.getElementById('dateRange').value;
+            if (!dateStr.includes(" to ")) {
+                alert("Please select a check-in and check-out date.");
+                return;
+            }
 
+            const [checkIn, checkOut] = dateStr.split(" to ");
+            selectedDates = { checkIn, checkOut };
+
+            // 呼叫 API
             fetch(`${API_BASE_URL}/rooms?checkIn=${checkIn}&checkOut=${checkOut}`)
                 .then(res => res.json())
                 .then(data => {
-                    renderRooms(data.availableRooms, 'available-list', false);
-                    renderRooms(data.bookedRooms, 'booked-list', true);
-                    
-                    document.getElementById('room-container').style.display = 'block';
-                    selectedRooms = [];
-                    updateCheckoutBar();
+                    renderRooms(data.availableRooms);
+                    const section = document.getElementById('room-section');
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("System error. Please try again later.");
                 });
         });
 
-        // 渲染房間卡片
-        function renderRooms(rooms, elementId, isBooked) {
-            const container = document.getElementById(elementId);
+        // 3. 渲染房間卡片 (更新版：按鈕直接顯示，設施取代面積)
+        function renderRooms(rooms) {
+            const container = document.getElementById('room-list-container');
             container.innerHTML = '';
-            
+
             if (rooms.length === 0) {
-                container.innerHTML = '<p class="text-muted col-12">無資料</p>';
+                container.innerHTML = '<div class="col-12 text-center py-5 text-muted">No rooms available for these dates.</div>';
                 return;
             }
 
             rooms.forEach(room => {
-                const badge = isBooked ? '<div class="sold-out-badge">SOLD OUT</div>' : '';
-                const cardClass = isBooked ? 'card h-100 sold-out-card' : 'card h-100 border-primary';
+                // 假圖
+                const imgUrl = `https://images.unsplash.com/photo-1560185893-a55cbc8c57e5?q=80&w=800&auto=format&fit=crop&sig=${room.roomId}`;
                 
-                // Checkbox 只有在未預訂時顯示
-                const checkboxHtml = !isBooked ? 
-                    `<div class="form-check position-absolute top-0 end-0 m-2">
-                        <input class="form-check-input" type="checkbox" style="transform: scale(1.5);"
-                               onchange="toggleRoom('${room.roomId}', ${room.price}, this)">
-                     </div>` : '';
-
-                const html = `
-                    <div class="col-md-4 room-card">
-                        <div class="${cardClass}">
-                            ${badge}
-                            ${checkboxHtml}
-                            <div class="card-body">
-                                <h5 class="card-title">${room.type}</h5>
-                                <p class="card-text mb-1">房號: ${room.roomId}</p>
-                                <h4 class="text-primary">$${room.price}</h4>
+                const col = document.createElement('div');
+                col.className = 'col-md-4';
+                col.innerHTML = `
+                    <div class="room-card">
+                        <div class="room-img-wrapper">
+                            <img src="${imgUrl}" class="room-img" alt="${room.type}">
+                        </div>
+                        <div class="room-content">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h5 class="room-title">${room.type}</h5>
+                                <span class="room-price-tag">NT$${room.price}</span>
                             </div>
+                            
+                            <ul class="amenities-list">
+                                <li><i class="bi bi-wifi"></i> Free Wifi</li>
+                                <li><i class="bi bi-cup-hot"></i> Breakfast</li>
+                                <li><i class="bi bi-people"></i> 2 Guests</li>
+                            </ul>
+
+                            <button class="btn btn-book-now" onclick="openBookingModal('${room.roomId}', '${room.type}', ${room.price}, '${imgUrl}')">
+                                立即預訂
+                            </button>
                         </div>
                     </div>
                 `;
-                container.innerHTML += html;
+                container.appendChild(col);
             });
         }
 
-        // 勾選/取消房間
-        function toggleRoom(id, price, checkbox) {
-            if (checkbox.checked) {
-                selectedRooms.push({ id, price });
-            } else {
-                selectedRooms = selectedRooms.filter(r => r.id !== id);
-            }
-            updateCheckoutBar();
+        // 4. 開啟 Modal (填入資料)
+        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        
+        function openBookingModal(id, type, price, imgUrl) {
+            currentRoom = { id, type, price };
+            
+            // 計算天數與總價
+            const d1 = new Date(selectedDates.checkIn);
+            const d2 = new Date(selectedDates.checkOut);
+            const nights = Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24))); // 至少1晚
+            const total = price * nights;
+
+            // 更新 UI
+            document.getElementById('modal-img').src = imgUrl;
+            document.getElementById('modal-title').innerText = type;
+            document.getElementById('modal-dates').innerText = `${selectedDates.checkIn} — ${selectedDates.checkOut} (${nights} nights)`;
+            document.getElementById('modal-price').innerText = `NT$${total}`;
+
+            bookingModal.show();
         }
 
-        function updateCheckoutBar() {
-            const bar = document.getElementById('checkout-bar');
-            if (selectedRooms.length > 0) {
-                bar.style.display = 'block';
-                document.getElementById('selected-count').innerText = selectedRooms.length;
-                // 計算總價
-                const total = selectedRooms.reduce((sum, r) => sum + r.price, 0);
-                document.getElementById('total-price').innerText = total;
-            } else {
-                bar.style.display = 'none';
-            }
-        }
-
-        // 顯示結帳頁
-        function showBookingForm() {
-            const ids = selectedRooms.map(r => r.id).join(', ');
-            document.getElementById('selectedRoomInfo').innerText = `您即將預訂房號: ${ids}`;
-            document.getElementById('booking-section').style.display = 'block';
-            document.getElementById('room-container').style.display = 'none';
-            document.getElementById('search-section').style.display = 'none';
-            document.getElementById('checkout-bar').style.display = 'none';
-        }
-
-        function cancelBooking() {
-            document.getElementById('booking-section').style.display = 'none';
-            document.getElementById('room-container').style.display = 'block';
-            document.getElementById('search-section').style.display = 'block';
-            updateCheckoutBar();
-        }
-
-        // 送出訂單
+        // 5. 送出訂單
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const req = {
-                roomIds: selectedRooms.map(r => r.id),
-                checkIn: document.getElementById('checkInDate').value,
-                checkOut: document.getElementById('checkOutDate').value,
+                roomIds: [currentRoom.id],
+                checkIn: selectedDates.checkIn,
+                checkOut: selectedDates.checkOut,
                 customer: {
                     name: document.getElementById('customerName').value,
                     phone: document.getElementById('customerPhone').value,
@@ -224,10 +591,11 @@
             })
             .then(res => {
                 if(res.ok) return res.json();
-                throw new Error('預訂失敗');
+                throw new Error('Booking failed');
             })
             .then(data => {
-                alert(`成功預訂 ${data.length} 間房間！`);
+                alert('Reservation Confirmed! Confirmation email sent.');
+                bookingModal.hide();
                 location.reload();
             })
             .catch(err => alert(err));
