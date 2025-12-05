@@ -16,11 +16,11 @@ public class Room {
     private String status;
 
      public boolean checkAvailability(LocalDate start, LocalDate end) {
-        return "AVAILABLE".equalsIgnoreCase(this.status);
+        return "AVAILABLE".equals(this.status);
     }
 
    
-    public void updateStatus(String newStatus) {
-        this.status = newStatus;
+    public void updateStatus(String status) {
+        this.status = status;
     }
 }

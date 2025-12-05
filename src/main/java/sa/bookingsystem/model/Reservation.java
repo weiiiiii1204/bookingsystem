@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation {
-    private String reservationId;
+    private String reservationID;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private double totalAmount;
@@ -20,8 +20,8 @@ public class Reservation {
     private Payment payment;
 
   
-    public void saveDetails(String id, Room room, Customer customer, LocalDate checkIn, LocalDate checkOut, double amount) {
-        this.reservationId = id;
+    public void saveDetails(String ID, Room room, Customer customer, LocalDate checkIn, LocalDate checkOut, double amount) {
+        this.reservationID = ID;
         this.room = room;
         this.customer = customer;
         this.checkInDate = checkIn;
