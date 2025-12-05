@@ -517,7 +517,7 @@
 
             rooms.forEach(room => {
                 // 假圖
-                const imgUrl = `https://images.unsplash.com/photo-1560185893-a55cbc8c57e5?q=80&w=800&auto=format&fit=crop&sig=${room.roomId}`;
+                const imgUrl = `https://images.unsplash.com/photo-1560185893-a55cbc8c57e5?q=80&w=800&auto=format&fit=crop&sig=${room.roomID}`;
                 
                 const col = document.createElement('div');
                 col.className = 'col-md-4';
@@ -538,7 +538,7 @@
                                 <li><i class="bi bi-people"></i> 2 Guests</li>
                             </ul>
 
-                            <button class="btn btn-book-now" onclick="openBookingModal('${room.roomId}', '${room.type}', ${room.price}, '${imgUrl}')">
+                            <button class="btn btn-book-now" onclick="openBookingModal('${room.roomID}', '${room.type}', ${room.price}, '${imgUrl}')">
                                 立即預訂
                             </button>
                         </div>
@@ -574,7 +574,7 @@
             e.preventDefault();
             
             const req = {
-                roomIds: [currentRoom.id],
+                roomIDs: [currentRoom.id],
                 checkIn: selectedDates.checkIn,
                 checkOut: selectedDates.checkOut,
                 customer: {
