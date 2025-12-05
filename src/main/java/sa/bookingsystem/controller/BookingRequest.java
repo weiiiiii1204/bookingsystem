@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class BookingRequest {
 
-    private List<String> roomIds;
+    private List<String> roomIDs;
     private Customer customer;
     private LocalDate checkIn;
     private LocalDate checkOut;

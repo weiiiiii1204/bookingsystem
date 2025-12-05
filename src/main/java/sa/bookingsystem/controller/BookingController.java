@@ -30,11 +30,11 @@ public class BookingController {
     public List<Reservation> createReservation(@RequestBody BookingRequest request) {
         // 直接呼叫 Service，完全沒有 Customer 的行為方法呼叫
         Customer customer = request.getCustomer();
-        
+
         customer.provideDetails(customer.getName(), customer.getPhone(), customer.getEmail());
 
         return bookingSystem.createReservation(
-                request.getRoomIds(),
+                request.getRoomIDs(),
                 request.getCustomer(),
                 request.getCheckIn(),
                 request.getCheckOut()

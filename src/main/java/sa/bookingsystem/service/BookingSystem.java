@@ -52,7 +52,7 @@ public class BookingSystem {
         // 1. 驗證所有房間並計算總金額
         for (String roomId : roomIds) {
             Room targetRoom = MockDataStore.rooms.stream()
-                    .filter(r -> r.getRoomId().equals(roomId))
+                    .filter(r -> r.getRoomID().equals(roomId))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("找不到房間 ID: " + roomId));
 
