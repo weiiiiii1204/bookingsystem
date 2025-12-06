@@ -1,10 +1,9 @@
 package sa.bookingsystem.service;
 
 import sa.bookingsystem.model.*;
-import sa.bookingsystem.repository.MockDataStore;
 import sa.bookingsystem.controller.RoomSearchResult;
 import org.springframework.stereotype.Service;
-
+import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -14,19 +13,32 @@ import java.util.List;
 @Service
 public class BookingSystem {
 
+
+    private List<Room> allRooms = new ArrayList<>();
+    private List<Reservation> allReservations = new ArrayList<>();
+
+    @PostConstruct
+    public void initData() {
+        // 初始化假資料
+        allRooms.add(new Room("101", "標準單人房", 2000, "AVAILABLE"));
+        allRooms.add(new Room("102", "豪華雙人房", 3500, "AVAILABLE"));
+        allRooms.add(new Room("103", "海景四人房", 5000, "AVAILABLE"));
+        allRooms.add(new Room("201", "總統套房", 8800, "AVAILABLE"));
+        allRooms.add(new Room("202", "經濟雙人房", 2500, "BOOKED")); // 測試用
+    }
     private static int reservationIDCounter = 0;
 
     public RoomSearchResult searchAvailableRooms(LocalDate start, LocalDate end) {
 
         List<Room> available = new ArrayList<>();
-        for (Room room : MockDataStore.allRooms) {
+        for (Room room : allRooms) {
             if (room.checkAvailability(start, end)) {
                 available.add(room);
             }
         }
 
         List<Room> booked = new ArrayList<>();
-        for (Room room : MockDataStore.allRooms) {
+        for (Room room : allRooms) {
             if (!room.checkAvailability(start, end)) {
                 booked.add(room);
             }
@@ -49,7 +61,7 @@ public class BookingSystem {
         // 第一步：驗證所有房間是否存在且可用，並計算總金額
         for (String roomID : roomIDs) {
             Room foundRoom = null;
-            for (Room room : MockDataStore.allRooms) {
+            for (Room room : allRooms) {
                 if (room.getRoomID().equals(roomID)) {
                     foundRoom = room;
                     break;
@@ -90,7 +102,7 @@ public class BookingSystem {
 
             room.updateStatus("BOOKED"); // 更新庫存
             
-            MockDataStore.allReservations.add(reservation);
+            allReservations.add(reservation);
             
             sendConfirmation(reservationID);
             createdReservations.add(reservation);
