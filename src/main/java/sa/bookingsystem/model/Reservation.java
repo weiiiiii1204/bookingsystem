@@ -20,14 +20,14 @@ public class Reservation {
     private Payment payment;
 
   
-    public void saveDetails(String ID, Room room, Customer customer, LocalDate checkIn, LocalDate checkOut, double amount) {
-        this.reservationID = ID;
+    public void saveDetails(String reservationID, Room room, Customer customer, LocalDate checkInDate, LocalDate checkOutDate, double totalAmount) {
+        this.reservationID = reservationID;
         this.room = room;
         this.customer = customer;
-        this.checkInDate = checkIn;
-        this.checkOutDate = checkOut;
-        this.totalAmount = amount;
-        this.status = "PENDING";
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.totalAmount = totalAmount;
+        this.status = "COMFIRMED";
     }
 
 
