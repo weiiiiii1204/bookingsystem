@@ -37,7 +37,8 @@ public class BookingController {
                 request.getRoomIDs(),
                 request.getCustomer(),
                 request.getCheckIn(),
-                request.getCheckOut()
+                request.getCheckOut(),
+                request.getPaymentDetails()
         );
     }
 }

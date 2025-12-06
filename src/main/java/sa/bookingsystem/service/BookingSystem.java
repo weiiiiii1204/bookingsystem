@@ -41,7 +41,7 @@ public class BookingSystem {
     }
 
   
-    public List<Reservation> createReservation(List<String> roomIDs, Customer customer, LocalDate start, LocalDate end) {
+    public List<Reservation> createReservation(List<String> roomIDs, Customer customer, LocalDate start, LocalDate end,String paymentDetails) {
         List<Reservation> createdReservations = new ArrayList<>();
         List<Room> targetRooms = new ArrayList<>();
         double grandTotalAmount = 0.0;
@@ -71,7 +71,8 @@ public class BookingSystem {
 
         // 2. 處理付款 (一次付清)
         Payment payment = new Payment();
-        payment.processPayment(grandTotalAmount, "CREDIT_CARD");
+
+        payment.processPayment(grandTotalAmount,paymentDetails);
         
         if (!payment.returnResult()) {
             throw new RuntimeException("付款失敗");
@@ -81,9 +82,9 @@ public class BookingSystem {
         for (Room room : targetRooms) {
             Reservation reservation = new Reservation();
             String reservationID = String.valueOf(++reservationIDCounter);
-            double roomAmount = calculateTotalAmount(room, start, end);
+            double totalAmount = calculateTotalAmount(room, start, end);
 
-            reservation.saveDetails(reservationID, room, customer, start, end, roomAmount);
+            reservation.saveDetails(reservationID, room, customer, start, end, totalAmount);
             reservation.setPayment(payment); // 共用同一個付款紀錄
             reservation.updatePaymentStatus("CONFIRMED");
 

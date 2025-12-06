@@ -366,6 +366,12 @@
         }
         .btn-confirm:hover { background-color: #333; }
 
+        ::placeholder {
+            color: #999 !important;
+            opacity: 0.2;
+        }
+
+
     </style>
 </head>
 <body>
@@ -444,6 +450,11 @@
                                     <div class="col-md-6 mb-3">
                                         <label class="modal-form-label">Email Address</label>
                                         <input type="email" class="form-control modal-form-input" id="customerEmail" placeholder="name@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5 class="fw-bold mt-4" style="font-family: 'Playfair Display', serif;">Payment Details</h5>
+                                        <label class="modal-form-label">Credit Card Number</label>
+                                        <input type="text" class="form-control modal-form-input" id="paymentDetails" placeholder="xxxx-xxxx-xxxx-xxxx" required>
                                     </div>
                                 </div>
                                 
@@ -581,7 +592,8 @@
                     name: document.getElementById('customerName').value,
                     phone: document.getElementById('customerPhone').value,
                     email: document.getElementById('customerEmail').value
-                }
+                },
+                paymentDetails: document.getElementById('paymentDetails').value
             };
 
             fetch(`${API_BASE_URL}/reserve`, {

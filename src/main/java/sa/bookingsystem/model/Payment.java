@@ -16,11 +16,10 @@ public class Payment {
     private static int idCounter = 0;
 
 
-    public void processPayment(double amount, String method) {
+    public void processPayment(double amount, String paymentDetails) {
 
         this.paymentID = String.valueOf(++idCounter);
         this.amount = amount;
-        this.method =method;
         
         //假設隨機30%的機率會失敗
         if (Math.random() < 0.3) {

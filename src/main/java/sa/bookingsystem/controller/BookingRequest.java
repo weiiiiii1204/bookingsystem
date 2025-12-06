@@ -12,4 +12,5 @@ public class BookingRequest {
     private Customer customer;
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private String paymentDetails;
 }
