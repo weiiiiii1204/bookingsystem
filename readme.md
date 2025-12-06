@@ -55,7 +55,7 @@ cd bookingsystem
 👉 http://localhost:8080/index.html
 
 ## 📂 專案結構 (Project Structure)
-
+```bash
 src/main/java/sa/bookingsystem/
 ├── controller/       # API 接口層 (BookingController)
 ├── service/          # 業務邏輯層 (BookingSystem - 負責搜尋、計算金額)
@@ -66,7 +66,7 @@ src/main/java/sa/bookingsystem/
 src/main/resources/
 ├── static/           # 前端檔案 (index.html, css, js)
 └── application.properties # 設定檔
-
+```
 
 ## 📡 API 文件 (API Documentation)
 
@@ -91,7 +91,7 @@ checkOut: 退房日期 (YYYY-MM-DD)
 URL: POST /api/booking/reserve
 
 描述: 建立新的訂單。
-
+```bash
 Body (JSON):
 
 {
@@ -104,7 +104,7 @@ Body (JSON):
   "checkIn": "2023-12-01",
   "checkOut": "2023-12-05"
 }
-
+```
 
 ## 🤝 協作指南 (Contribution Guide)
 
