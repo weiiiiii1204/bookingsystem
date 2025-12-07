@@ -21,357 +21,93 @@
             font-family: 'Lato', sans-serif;
             color: var(--primary-black);
             background-color: var(--white);
+            padding-bottom: 80px;
         }
 
-        /* --- 頂部導航 (透明、置中) --- */
-        .navbar {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            padding-top: 25px;
-        }
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            margin: 0 15px;
-            transition: opacity 0.3s;
-        }
+        /* --- 導航 & Hero --- */
+        .navbar { position: absolute; top: 0; width: 100%; z-index: 100; padding-top: 25px; }
+        .nav-link { color: rgba(255, 255, 255, 0.9) !important; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin: 0 15px; transition: opacity 0.3s; }
         .nav-link:hover { opacity: 0.7; }
 
-        /* --- Hero Section (Laguna Layout) --- */
         .hero-section {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            /* 背景圖：保持 White Space 風格的冷色調 */
-            background-image: url('/images/1.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative; height: 100vh; width: 100%;
+            background-image: url('/images/1.jpg'); /* 請確認路徑 */
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .hero-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.35); /* 稍微加深遮罩以突出文字 */
-            z-index: 1;
-        }
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            width: 100%;
-        }
+        .hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.35); z-index: 1; }
+        .hero-content { position: relative; z-index: 10; text-align: center; width: 100%; }
 
-        /* Logo Box */
-        .brand-logo {
-            text-align: center;
-            color: #fff;
-            margin-bottom: 60px;
-            position: relative;
-            display: inline-block;
-        }
+        /* Logo */
+        .brand-logo { text-align: center; color: #fff; margin-bottom: 60px; position: relative; display: inline-block; }
+        .brand-logo .number { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 400; line-height: 0.8; display: block; margin-bottom: 5px; }
+        .brand-logo .prefix { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic; position: absolute; top: 5px; left: -20px; }
+        .brand-logo .text { font-family: 'Lato', sans-serif; font-size: 0.9rem; letter-spacing: 6px; text-transform: uppercase; display: block; border-top: 1px solid rgba(255,255,255,0.5); padding-top: 10px; margin-top: 10px; }
 
-        .brand-logo .number {
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;  /* 數字放大 */
-            font-weight: 400; /* 讓字體輕盈一點 */
-            line-height: 0.8;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .brand-logo .prefix {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-style: italic;
-            position: absolute;
-            top: 5px;
-            left: -20px; /* 將 No. 懸掛在左側 */
-        }
-
-        .brand-logo .text {
-            font-family: 'Lato', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 6px; /* 寬間距營造高級感 */
-            text-transform: uppercase;
-            display: block;
-            border-top: 1px solid rgba(255,255,255,0.5); /* 上方細線 */
-            padding-top: 10px;
-            margin-top: 10px;
-        }
-
-        /* --- 搜尋懸浮條 (日曆優化版) --- */
+        /* 搜尋條 */
         .search-bar-container {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 15px 25px;       /* 內距稍微調小 */
-        width: auto;              /* 寬度自動 */
-        min-width: auto;          /* 移除原本的 600px 限制 */
-        max-width: 500px;         /* 設定一個最大寬度，避免太長 */
-        margin: 0 auto;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-        border-radius: 0;
-        display: flex;
-        align-items: flex-end;
-        gap: 15px;
-    }
-
-        /* 客製化日曆樣式 (模仿參考圖) */
-        .flatpickr-calendar {
-            font-family: 'Playfair Display', serif !important; /* 日曆使用襯線體 */
-            border-radius: 0 !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-            border: none !important;
+            background: rgba(255, 255, 255, 0.95); padding: 15px 25px; width: auto;
+            min-width: auto; max-width: 500px; margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2); border-radius: 0;
+            display: flex; align-items: flex-end; gap: 15px;
         }
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day:hover, .flatpickr-day:focus {
-            background: #444 !important; /* 深灰色圓圈 */
-            border-color: #444 !important;
-            color: #fff !important;
-            border-radius: 50% !important; /* 強制圓形 */
-        }
-        .flatpickr-day.inRange {
-            box-shadow: -5px 0 0 #e6e6e6, 5px 0 0 #e6e6e6 !important;
-            background: #e6e6e6 !important;
-            border-color: #e6e6e6 !important;
-            color: #333 !important;
-        }
-        .flatpickr-month {
-            color: #000 !important;
-            fill: #000 !important;
-        }
-        .flatpickr-current-month .flatpickr-monthDropdown-months {
-            font-weight: bold;
-        }
-
-        /* 輸入框樣式 */
-        .date-input-group {
-            flex-grow: 1;
-        }
-        .form-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #888;
-            margin-bottom: 8px;
-            display: block;
-            font-weight: 700;
-        }
-        .custom-date-input {
-        border: none;
-        border-bottom: 2px solid #ddd;
-        background: transparent;
-        width: 250px;             /* 直接指定一個較小的寬度 (例如 250px) */
-        padding: 5px 0;
-        font-family: 'Playfair Display', serif;
-        font-size: 1.1rem;        /* 字體稍微調小 */
-        color: #333;
-        cursor: pointer;
-        text-align: center;       /* 讓日期文字置中看起來更平衡 */
-        }
-        .custom-date-input:focus {
-            outline: none;
-            border-bottom-color: #000;
-        }
-
-        .btn-search {
-            background-color: var(--primary-black);
-            color: #fff;
-            border: none;
-            padding: 12px 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 500;
-            height: 55px; /* 與輸入框對齊 */
-            border-radius: 0;
-            transition: all 0.3s;
-        }
+        .form-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 8px; display: block; font-weight: 700; }
+        .custom-date-input { border: none; border-bottom: 2px solid #ddd; background: transparent; width: 250px; padding: 5px 0; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #333; cursor: pointer; text-align: center; }
+        .custom-date-input:focus { outline: none; border-bottom-color: #000; }
+        .btn-search { background-color: var(--primary-black); color: #fff; border: none; padding: 12px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; height: 55px; border-radius: 0; transition: all 0.3s; }
         .btn-search:hover { background-color: #555; }
 
-        /* --- 房間列表區塊 --- */
-        #room-section {
-            padding: 100px 0;
-            background-color: var(--white);
-            display: none; /* 搜尋前隱藏 */
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .section-header h3 {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 3px;
-            font-size: 2rem;
-        }
+        /* --- 房間列表 --- */
+        #room-section { padding: 100px 0; background-color: var(--white); display: none; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h3 { font-family: 'Playfair Display', serif; letter-spacing: 3px; font-size: 2rem; }
 
-        /* 房型卡片設計 (White Space 風格) */
-        .room-card {
-            background: #fff;
-            margin-bottom: 50px;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-        .room-card:hover {
-            border-color: #eee;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
+        .room-card { background: #fff; margin-bottom: 50px; border: 2px solid transparent; transition: all 0.2s ease; cursor: pointer; position: relative; }
+        .room-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .room-card.is-selected { border-color: #000; background-color: #fafafa; }
+        .room-card.is-selected::after { content: 'SELECTED'; position: absolute; top: 10px; right: 10px; background: #000; color: #fff; padding: 5px 10px; font-size: 0.7rem; letter-spacing: 1px; z-index: 5; }
         
-        .room-img-wrapper {
-            position: relative;
-            overflow: hidden;
-            height: 300px; /* 圖片高度增加 */
-        }
-        .room-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-            filter: grayscale(10%);
-        }
-        .room-card:hover .room-img {
-            transform: scale(1.05);
-            filter: grayscale(0%);
-        }
+        .room-card.sold-out { pointer-events: none; }
+        .room-card.sold-out .room-img-wrapper { opacity: 0.5; filter: grayscale(100%); }
+        .room-card.sold-out::before { content: 'SOLD OUT'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-10deg); border: 3px solid #999; color: #999; font-size: 2rem; font-weight: 700; padding: 10px 20px; z-index: 10; opacity: 0.8; font-family: 'Playfair Display', serif; }
 
-        .room-content {
-            padding: 25px 10px 10px 10px;
-        }
-        .room-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            font-family: 'Playfair Display', serif;
-        }
-        .room-price-tag {
-            font-size: 1.2rem;
-            font-weight: 300;
-            color: #000;
-            text-align: right;
-        }
+        .room-img-wrapper { position: relative; overflow: hidden; height: 300px; }
+        .room-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; filter: grayscale(10%); }
+        .room-card:hover .room-img { transform: scale(1.05); filter: grayscale(0%); }
+
+        .room-content { padding: 25px 15px; }
+        .room-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; font-family: 'Playfair Display', serif; }
+        .room-price-tag { font-size: 1.2rem; font-weight: 300; color: #000; text-align: right; }
+        .amenities-list { list-style: none; padding: 0; margin: 15px 0 0 0; display: flex; gap: 15px; color: #777; font-size: 0.9rem; }
+
+        .btn-select-room { width: 100%; background-color: transparent; color: #000; border: 1px solid #000; padding: 10px; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; border-radius: 0; transition: all 0.3s; }
+        .room-card.is-selected .btn-select-room { background-color: #000; color: #fff; content: 'Selected'; }
+
+        /* --- Checkout Bar --- */
+        #checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: #fff; padding: 15px 0; z-index: 900; display: none; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
+        .checkout-info { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+        .btn-checkout { background: #fff; color: #000; border: none; padding: 10px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; border-radius: 0; }
+        .btn-checkout:hover { background: #ddd; }
+
+        /* --- Modal --- */
+        .modal-content { border-radius: 0; border: none; overflow: hidden; }
+        .modal-header { border-bottom: none; padding-bottom: 0; }
+        .progress-steps { display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+        .step.active { color: #000; font-weight: 700; border-bottom: 2px solid #000; }
+        .booking-summary-col { background-color: #f8f8f8; padding: 40px; }
+        .booking-form-col { padding: 40px; background-color: #fff; }
+        .modal-form-input { border: none; border-bottom: 1px solid #ddd; padding: 10px 0; margin-bottom: 25px; border-radius: 0; }
+        .modal-form-input:focus { box-shadow: none; border-bottom: 1px solid #000; }
+        .btn-next, .btn-confirm { background-color: #000; color: #fff; width: 100%; padding: 15px; text-transform: uppercase; letter-spacing: 2px; border: none; border-radius: 0; margin-top: 10px; }
+        .btn-prev { background: transparent; border: none; color: #666; text-decoration: underline; margin-top: 15px; font-size: 0.9rem; }
+        .error-msg { color: #dc3545; font-size: 0.9rem; margin-top: 5px; display: none; }
         
-        /* 設施圖示列 */
-        .amenities-list {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0 25px 0;
-            display: flex;
-            gap: 15px;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        .amenities-list li {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+        /* 進度條樣式修正 */
+        .progress { height: 6px; border-radius: 0; background-color: #e9ecef; }
+        .progress-bar { transition: width 0.1s linear; } /* 縮短 transition 讓重置時瞬間完成 */
 
-        /* 預訂按鈕 (直接在卡片上) */
-        .btn-book-now {
-            width: 100%;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            border-radius: 0;
-            transition: background 0.3s;
-        }
-        .btn-book-now:hover {
-            background-color: #333;
-        }
-
-        /* --- 新版預訂 Modal (左右分割設計) --- */
-        .modal-content {
-            border-radius: 0;
-            border: none;
-            overflow: hidden;
-        }
-        .modal-body {
-            padding: 0;
-        }
-        .booking-summary-col {
-            background-color: #f8f8f8;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .booking-form-col {
-            padding: 40px;
-            background-color: #fff;
-        }
-        
-        .summary-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            margin-bottom: 20px;
-            filter: grayscale(20%);
-        }
-        .summary-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        .summary-dates {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .summary-total {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #000;
-            font-family: 'Playfair Display', serif;
-        }
-        
-        /* Modal Form Styles */
-        .modal-form-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #999;
-            margin-bottom: 5px;
-        }
-        .modal-form-input {
-            border: none;
-            border-bottom: 1px solid #ddd;
-            border-radius: 0;
-            padding: 10px 0;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-        .modal-form-input:focus {
-            box-shadow: none;
-            border-bottom: 1px solid #000;
-        }
-        .btn-confirm {
-            background-color: #000;
-            color: #fff;
-            width: 100%;
-            padding: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: none;
-            border-radius: 0;
-            margin-top: 10px;
-        }
-        .btn-confirm:hover { background-color: #333; }
-
-        ::placeholder {
-            color: #999 !important;
-            opacity: 0.2;
-        }
-
-
+        .flatpickr-calendar { font-family: 'Playfair Display', serif !important; border-radius: 0 !important; border: none !important; }
+        .flatpickr-day.selected { background: #444 !important; border-color: #444 !important; border-radius: 50% !important; }
     </style>
 </head>
 <body>
@@ -381,13 +117,11 @@
             <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Rooms</a></li>
             <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
     </nav>
 
     <header class="hero-section">
         <div class="hero-overlay"></div>
-        
         <div class="hero-content container">
             <div class="brand-logo">
                 <span class="prefix">No.</span>
@@ -410,56 +144,106 @@
         <div class="container">
             <div class="section-header">
                 <h3>Select Your Sanctuary</h3>
-                <p class="text-muted">Best available rates</p>
+                <p class="text-muted">Available Rooms & Suites</p>
             </div>
-            <div id="room-list-container" class="row">
-                </div>
+            <div id="room-list-container" class="row"></div>
         </div>
     </section>
 
-    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl"> <div class="modal-content">
+    <div id="checkout-bar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="checkout-info">
+                Selected: <span id="bar-count" class="fw-bold">0</span> rooms 
+                <span class="mx-2">|</span> 
+                Total: <span id="bar-total" class="fw-bold">NT$0</span>
+            </div>
+            <button class="btn btn-checkout" onclick="openBookingModal()">Proceed to Book</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-xl"> 
+            <div class="modal-content">
                 <div class="modal-body">
                     <div class="row g-0">
-                        <div class="col-md-5 booking-summary-col">
-                            <img src="" id="modal-img" class="summary-img">
-                            <h4 id="modal-title" class="summary-title">Room Name</h4>
-                            <div id="modal-dates" class="summary-dates">Dec 01 - Dec 05</div>
-                            <div class="d-flex justify-content-between align-items-end mt-4">
+                        <div class="col-md-4 booking-summary-col">
+                            <h4 class="summary-title mb-4">Your Stay</h4>
+                            <div class="summary-dates mb-4" id="modal-dates"></div>
+                            <h5 class="fw-bold mb-3" style="font-family: 'Playfair Display', serif;">Selected Rooms</h5>
+                            <div id="modal-room-list" class="mb-4 small text-muted"></div>
+                            <div class="border-top pt-3 d-flex justify-content-between align-items-end">
                                 <span class="text-muted">Total Price</span>
                                 <span id="modal-price" class="summary-total">$0</span>
                             </div>
                         </div>
                         
-                        <div class="col-md-7 booking-form-col">
-                            <div class="d-flex justify-content-between mb-5">
-                                <h4 class="fw-bold" style="font-family: 'Playfair Display', serif;">Guest Details</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="col-md-8 booking-form-col">
+                            <div class="d-flex justify-content-between mb-4">
+                                <div class="progress-steps">
+                                    <span id="step-indicator-1" class="step active">01. Guest Details</span>
+                                    <span id="step-indicator-2" class="step">02. Payment</span>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()"></button>
                             </div>
                             
                             <form id="bookingForm">
-                                <div class="mb-3">
-                                    <label class="modal-form-label">Full Name</label>
-                                    <input type="text" class="form-control modal-form-input" id="customerName" placeholder="Enter your name" required>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="modal-form-label">Phone Number</label>
-                                        <input type="tel" class="form-control modal-form-input" id="customerPhone" placeholder="09xx-xxx-xxx" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="modal-form-label">Email Address</label>
-                                        <input type="email" class="form-control modal-form-input" id="customerEmail" placeholder="name@example.com" required>
-                                    </div>
+                                <div id="step-1-content">
+                                    <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">Guest Information</h4>
                                     <div class="mb-3">
-                                        <h5 class="fw-bold mt-4" style="font-family: 'Playfair Display', serif;">Payment Details</h5>
-                                        <label class="modal-form-label">Credit Card Number</label>
-                                        <input type="text" class="form-control modal-form-input" id="paymentDetails" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+                                        <label class="modal-form-label">Full Name</label>
+                                        <input type="text" class="form-control modal-form-input" id="customerName" required>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="modal-form-label">Phone</label>
+                                            <input type="tel" class="form-control modal-form-input" id="customerPhone" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="modal-form-label">Email</label>
+                                            <input type="email" class="form-control modal-form-input" id="customerEmail" required>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-next" onclick="goToStep2()">Next: Payment</button>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-confirm mt-4">Confirm Reservation</button>
-                                <p class="text-center text-muted mt-3 small">Payment will be processed at the hotel.</p>
+
+                                <div id="step-2-content" style="display: none;">
+                                    <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">Secure Payment</h4>
+                                    <div class="alert alert-light border small mb-4">
+                                        <i class="bi bi-lock-fill"></i> Payment is processed securely. No card information is stored.
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="modal-form-label">Card Number</label>
+                                        <input type="text" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+                                        <div id="payment-error" class="error-msg">
+                                            <i class="bi bi-exclamation-circle"></i> Payment failed. Please check your card info. (Backend Amount Error?)
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label class="modal-form-label">Expiry</label>
+                                            <input type="text" class="form-control modal-form-input" placeholder="MM/YY" required>
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label class="modal-form-label">CVV</label>
+                                            <input type="text" class="form-control modal-form-input" placeholder="123" required>
+                                        </div>
+                                    </div>
+
+                                    <div id="payment-processing" class="mb-4" style="display: none;">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-muted" id="process-text">Connecting to bank...</small>
+                                            <small class="fw-bold" id="process-percent">0%</small>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="progress-bar-inner" class="progress-bar bg-dark" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-confirm" id="btn-submit">Complete Booking</button>
+                                    <button type="button" class="btn btn-prev" onclick="goToStep1()">Back to Details</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -472,145 +256,218 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         const API_BASE_URL = 'http://localhost:8080/api/booking';
-        let currentRoom = null;
-        let selectedDates = [];
+        let selectedDates = {};
+        let selectedRooms = []; 
+        let currentNights = 0;
 
-        // 1. 初始化 Flatpickr 日曆
         flatpickr("#dateRange", {
             mode: "range",
             minDate: "today",
             dateFormat: "Y-m-d",
-            showMonths: 1,
-            // 這些 class 設定是為了配合上面寫的 CSS，做出參考圖的圓圈效果
-            onClose: function(selectedDates, dateStr, instance) {
-                // 可以在這裡做選擇後的處理
-            }
+            showMonths: 1
         });
 
-        // 2. 搜尋房間
+        // Search logic
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // 取得 Flatpickr 的值
             const dateStr = document.getElementById('dateRange').value;
-            if (!dateStr.includes(" to ")) {
-                alert("Please select a check-in and check-out date.");
-                return;
-            }
-
+            if (!dateStr.includes(" to ")) { alert("Please select check-in and check-out dates."); return; }
             const [checkIn, checkOut] = dateStr.split(" to ");
             selectedDates = { checkIn, checkOut };
+            const d1 = new Date(checkIn);
+            const d2 = new Date(checkOut);
+            currentNights = Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24)));
 
-            // 呼叫 API
             fetch(`${API_BASE_URL}/rooms?checkIn=${checkIn}&checkOut=${checkOut}`)
                 .then(res => res.json())
                 .then(data => {
-                    renderRooms(data.availableRooms);
-                    const section = document.getElementById('room-section');
-                    section.style.display = 'block';
-                    section.scrollIntoView({ behavior: 'smooth' });
+                    renderRooms(data.availableRooms || [], data.bookedRooms || []);
+                    document.getElementById('room-section').style.display = 'block';
+                    document.getElementById('room-section').scrollIntoView({ behavior: 'smooth' });
+                    selectedRooms = [];
+                    updateCheckoutBar();
                 })
-                .catch(err => {
-                    console.error(err);
-                    alert("System error. Please try again later.");
-                });
+                .catch(err => { console.error(err); alert("System error."); });
         });
 
-        // 3. 渲染房間卡片 (更新版：按鈕直接顯示，設施取代面積)
-        function renderRooms(rooms) {
+        function renderRooms(available, booked) {
             const container = document.getElementById('room-list-container');
             container.innerHTML = '';
-
-            if (rooms.length === 0) {
-                container.innerHTML = '<div class="col-12 text-center py-5 text-muted">No rooms available for these dates.</div>';
-                return;
-            }
-
-            rooms.forEach(room => {
-                // 假圖
-                const imgUrl = `https://images.unsplash.com/photo-1560185893-a55cbc8c57e5?q=80&w=800&auto=format&fit=crop&sig=${room.roomID}`;
-                
-                const col = document.createElement('div');
-                col.className = 'col-md-4';
-                col.innerHTML = `
-                    <div class="room-card">
-                        <div class="room-img-wrapper">
-                            <img src="${imgUrl}" class="room-img" alt="${room.type}">
-                        </div>
-                        <div class="room-content">
-                            <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h5 class="room-title">${room.type}</h5>
-                                <span class="room-price-tag">NT$${room.price}</span>
-                            </div>
-                            
-                            <ul class="amenities-list">
-                                <li><i class="bi bi-wifi"></i> Free Wifi</li>
-                                <li><i class="bi bi-cup-hot"></i> Breakfast</li>
-                                <li><i class="bi bi-people"></i> 2 Guests</li>
-                            </ul>
-
-                            <button class="btn btn-book-now" onclick="openBookingModal('${room.roomID}', '${room.type}', ${room.price}, '${imgUrl}')">
-                                立即預訂
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(col);
-            });
+            available.forEach(room => container.appendChild(createRoomCard(room, false)));
+            booked.forEach(room => container.appendChild(createRoomCard(room, true)));
+            if (available.length === 0 && booked.length === 0) container.innerHTML = '<div class="col-12 text-center py-5">No rooms found.</div>';
         }
 
-        // 4. 開啟 Modal (填入資料)
-        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-        
-        function openBookingModal(id, type, price, imgUrl) {
-            currentRoom = { id, type, price };
+        function createRoomCard(room, isSoldOut) {
+            const imgUrl = `https://images.unsplash.com/photo-1560185893-a55cbc8c57e5?q=80&w=800&auto=format&fit=crop&sig=${room.roomID}`;
+            const col = document.createElement('div');
+            col.className = 'col-lg-4 col-md-6';
+            const soldOutClass = isSoldOut ? 'sold-out' : '';
+            const btnText = isSoldOut ? 'Unavailable' : 'Select Room';
             
-            // 計算天數與總價
-            const d1 = new Date(selectedDates.checkIn);
-            const d2 = new Date(selectedDates.checkOut);
-            const nights = Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24))); // 至少1晚
-            const total = price * nights;
+            col.innerHTML = `
+                <div class="room-card ${soldOutClass}" id="card-${room.roomID}" onclick="toggleRoom('${room.roomID}', '${room.type}', ${room.price}, this)">
+                    <div class="room-img-wrapper"><img src="${imgUrl}" class="room-img" alt="${room.type}"></div>
+                    <div class="room-content">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h5 class="room-title">${room.type}</h5>
+                            <span class="room-price-tag">NT$${room.price}</span>
+                        </div>
+                        <ul class="amenities-list"><li><i class="bi bi-wifi"></i> Wifi</li><li><i class="bi bi-cup-hot"></i> Breakfast</li></ul>
+                        <button class="btn btn-select-room">${btnText}</button>
+                    </div>
+                </div>`;
+            return col;
+        }
 
-            // 更新 UI
-            document.getElementById('modal-img').src = imgUrl;
-            document.getElementById('modal-title').innerText = type;
-            document.getElementById('modal-dates').innerText = `${selectedDates.checkIn} — ${selectedDates.checkOut} (${nights} nights)`;
-            document.getElementById('modal-price').innerText = `NT$${total}`;
+        function toggleRoom(id, type, price, cardElement) {
+            const index = selectedRooms.findIndex(r => r.id === id);
+            if (index === -1) {
+                selectedRooms.push({ id, type, price });
+                cardElement.classList.add('is-selected');
+                cardElement.querySelector('button').innerText = 'Selected';
+                cardElement.querySelector('button').style.backgroundColor = '#000';
+                cardElement.querySelector('button').style.color = '#fff';
+            } else {
+                selectedRooms.splice(index, 1);
+                cardElement.classList.remove('is-selected');
+                cardElement.querySelector('button').innerText = 'Select Room';
+                cardElement.querySelector('button').style.backgroundColor = 'transparent';
+                cardElement.querySelector('button').style.color = '#000';
+            }
+            updateCheckoutBar();
+        }
 
+        function updateCheckoutBar() {
+            const bar = document.getElementById('checkout-bar');
+            if (selectedRooms.length > 0) {
+                bar.style.display = 'block';
+                const roomTotal = selectedRooms.reduce((sum, r) => sum + r.price, 0);
+                const grandTotal = roomTotal * currentNights;
+                document.getElementById('bar-count').innerText = selectedRooms.length;
+                document.getElementById('bar-total').innerText = `NT$${grandTotal}`;
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+
+        // Modal Logic
+        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        function openBookingModal() {
+            document.getElementById('modal-dates').innerText = `${selectedDates.checkIn} — ${selectedDates.checkOut} (${currentNights} nights)`;
+            const listDiv = document.getElementById('modal-room-list');
+            listDiv.innerHTML = selectedRooms.map(r => `
+                <div class="d-flex justify-content-between border-bottom py-2">
+                    <span>${r.type}</span>
+                    <span>NT$${r.price} x ${currentNights}</span>
+                </div>`).join('');
+            const grandTotal = selectedRooms.reduce((sum, r) => sum + r.price, 0) * currentNights;
+            document.getElementById('modal-price').innerText = `NT$${grandTotal}`;
+            goToStep1();
+            document.getElementById('payment-error').style.display = 'none';
+            // 重置進度條 UI
+            document.getElementById('payment-processing').style.display = 'none'; 
+            document.getElementById('progress-bar-inner').style.width = '0%';
+            document.getElementById('btn-submit').disabled = false;
+            document.getElementById('btn-submit').innerText = 'Complete Booking';
+            
             bookingModal.show();
         }
+        function closeModal() { bookingModal.hide(); }
+        function goToStep1() {
+            document.getElementById('step-1-content').style.display = 'block';
+            document.getElementById('step-2-content').style.display = 'none';
+            document.getElementById('step-indicator-1').classList.add('active');
+            document.getElementById('step-indicator-2').classList.remove('active');
+        }
+        function goToStep2() {
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const email = document.getElementById('customerEmail').value;
+            if(!name || !phone || !email) { alert("Please fill in all guest details."); return; }
+            document.getElementById('step-1-content').style.display = 'none';
+            document.getElementById('step-2-content').style.display = 'block';
+            document.getElementById('step-indicator-1').classList.remove('active');
+            document.getElementById('step-indicator-2').classList.add('active');
+        }
 
-        // 5. 送出訂單
+        // Submit with Animation Fix
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const req = {
-                roomIDs: [currentRoom.id],
-                checkIn: selectedDates.checkIn,
-                checkOut: selectedDates.checkOut,
-                customer: {
-                    name: document.getElementById('customerName').value,
-                    phone: document.getElementById('customerPhone').value,
-                    email: document.getElementById('customerEmail').value
-                },
-                paymentDetails: document.getElementById('paymentDetails').value
-            };
+            const cardNum = document.getElementById('cardNumber').value;
+            const errorMsg = document.getElementById('payment-error');
+            const processingBar = document.getElementById('payment-processing');
+            const barInner = document.getElementById('progress-bar-inner');
+            const percentText = document.getElementById('process-percent');
+            const processText = document.getElementById('process-text');
+            const submitBtn = document.getElementById('btn-submit');
 
-            fetch(`${API_BASE_URL}/reserve`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(req)
-            })
-            .then(res => {
-                if(res.ok) return res.json();
-                throw new Error('Booking failed');
-            })
-            .then(data => {
-                alert('Reservation Confirmed! Confirmation email sent.');
-                bookingModal.hide();
-                location.reload();
-            })
-            .catch(err => alert(err));
+            // 1. 初始化狀態 (重要：先歸零)
+            errorMsg.style.display = 'none';
+            barInner.style.width = '0%'; // 強制歸零
+            percentText.innerText = '0%';
+            processingBar.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Processing...';
+            
+            // 2. 開始動畫
+            let width = 0;
+            const totalDuration = 1500;
+            const intervalTime = 30;
+            const step = 100 / (totalDuration / intervalTime);
+
+            const timer = setInterval(() => {
+                width += step;
+                if (width > 30 && width < 60) processText.innerText = 'Verifying card details...';
+                else if (width > 60) processText.innerText = 'Finalizing transaction...';
+
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(timer);
+                    sendBookingRequest(cardNum); // 動畫結束後發送請求
+                }
+                barInner.style.width = width + '%';
+                percentText.innerText = Math.round(width) + '%';
+            }, intervalTime);
+
+            function sendBookingRequest(cardNum) {
+                const req = {
+                    roomIDs: selectedRooms.map(r => r.id),
+                    checkIn: selectedDates.checkIn,
+                    checkOut: selectedDates.checkOut,
+                    customer: {
+                        name: document.getElementById('customerName').value,
+                        phone: document.getElementById('customerPhone').value,
+                        email: document.getElementById('customerEmail').value
+                    },
+                    paymentDetails: cardNum
+                };
+
+                fetch(`${API_BASE_URL}/reserve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(req)
+                })
+                .then(res => {
+                    if(res.ok) return res.json();
+                    throw new Error('Payment Failed (Backend returned error status)');
+                })
+                .then(data => {
+                    alert('Reservation Successful! Confirmation email sent.');
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("Backend Error:", err);
+                    setTimeout(() => {
+                        processingBar.style.display = 'none';
+                        barInner.style.width = '0%'; // 失敗後也歸零，確保下次動畫正常
+                        errorMsg.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Complete Booking';
+                        document.getElementById('cardNumber').focus();
+                    }, 500);
+                });
+            }
         });
     </script>
 </body>
