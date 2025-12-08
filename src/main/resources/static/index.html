@@ -110,7 +110,7 @@
             <li class="nav-item"><a class="nav-link" href="#">房型</a></li>
             <li class="nav-item"><a class="nav-link" href="#">關於我們</a></li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="alert('訂單查詢功能開發中 (My Orders feature coming soon!)')">訂單紀錄</a>
+                <a class="nav-link" href="#" onclick="Swal.fire({icon:'info', title:'功能開發中', text:'訂單查詢功能敬請期待！', confirmButtonColor:'#222'})">訂單紀錄</a>
             </li>
         </ul>
     </nav>
@@ -208,18 +208,18 @@
                                     
                                     <div class="mb-3">
                                         <label class="modal-form-label">卡號</label>
-                                        <input type="text" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+                                        <input type="text" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx">
                                         <div id="payment-error" class="error-msg"></div>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-6 mb-3">
                                             <label class="modal-form-label">卡片到期日</label>
-                                            <input type="text" class="form-control modal-form-input" placeholder="MM/YY" required>
+                                            <input type="text" class="form-control modal-form-input" id="cardExpiry" placeholder="MM/YY">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label class="modal-form-label">安全碼 (CVV)</label>
-                                            <input type="text" class="form-control modal-form-input" placeholder="123" required>
+                                            <input type="text" class="form-control modal-form-input" id="cardCvv" placeholder="123">
                                         </div>
                                     </div>
 
@@ -271,7 +271,15 @@
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const dateStr = document.getElementById('dateRange').value;
-            if (!dateStr.includes(" to ")) { alert("請選擇有效的日期範圍"); return; }
+            if (!dateStr.includes(" to ")) { 
+                Swal.fire({
+                icon: 'warning',
+                title: '日期未選擇',
+                text: '請選擇有效的入住與退房日期範圍',
+                confirmButtonColor: '#222'
+             });
+            return; 
+        }
 
             const [start, end] = dateStr.split(" to ");
             state.checkIn = start;
@@ -284,7 +292,15 @@
                     processRoomData(data.availableRooms || [], data.soldOutRooms || []);
                     updateUI();
                 })
-                .catch(err => { console.error(err); alert("System error. Please try again."); });
+                .catch(err => { 
+                    console.error(err); 
+                    Swal.fire({
+                        icon: 'error',
+                        title: '連線錯誤',
+                        text: '系統暫時無法回應，請稍後再試。',
+                        confirmButtonColor: '#222'
+                    });
+                });
         });
 
         // --- 3. 資料處理 ---
@@ -417,7 +433,13 @@
             if (step === 2) {
                 const inputs = ['customerName', 'customerPhone', 'customerEmail'];
                 if (inputs.some(id => !document.getElementById(id).value)) {
-                    alert("請填寫所有旅客資料"); return;
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '資料不完整',
+                        text: '請填寫所有旅客資料（姓名、電話、Email）',
+                        confirmButtonColor: '#222'
+                    });
+                    return;
                 }
             }
             document.getElementById('step-1-content').style.display = step === 1 ? 'block' : 'none';
@@ -431,8 +453,19 @@
 
         // --- 7. 送出訂單 ---
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const cardNum = document.getElementById('cardNumber').value;
+            const cardNum = document.getElementById('cardNumber').value.trim();
+            const cardExpiry = document.getElementById('cardExpiry').value.trim(); 
+            const cardCvv = document.getElementById('cardCvv').value.trim();    
+
+            if (!cardNum || !cardExpiry || !cardCvv) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '付款資訊不完整',
+                    text: '請填寫完整的信用卡號、到期日與安全碼',
+                    confirmButtonColor: '#222'
+                });
+                return; 
+            }
             const ui = {
                 error: document.getElementById('payment-error'),
                 bar: document.getElementById('payment-processing'),
