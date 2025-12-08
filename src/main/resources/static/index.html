@@ -208,18 +208,18 @@
                                     
                                     <div class="mb-3">
                                         <label class="modal-form-label">卡號</label>
-                                        <input type="text" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx">
+                                        <input type="tel" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19" inputmode="numeric">
                                         <div id="payment-error" class="error-msg"></div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-6 mb-3">
                                             <label class="modal-form-label">卡片到期日</label>
-                                            <input type="text" class="form-control modal-form-input" id="cardExpiry" placeholder="MM/YY">
+                                            <input type="tel" class="form-control modal-form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" >
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label class="modal-form-label">安全碼 (CVV)</label>
-                                            <input type="text" class="form-control modal-form-input" id="cardCvv" placeholder="123">
+                                            <input type="tel" class="form-control modal-form-input" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric">
                                         </div>
                                     </div>
 
@@ -451,7 +451,26 @@
         window.goToStep1 = () => goToStep(1);
         window.goToStep2 = () => goToStep(2);
 
-        // --- 7. 送出訂單 ---
+        // --- 7. 信用卡輸入格式化 (自動加空格與斜線) ---
+        document.getElementById('cardNumber').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(.{4})/g, '$1 ').trim();
+            e.target.value = value;
+        });
+
+        document.getElementById('cardExpiry').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); 
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            e.target.value = value;
+        });
+
+        document.getElementById('cardCvv').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // --- 8. 送出訂單 ---
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             const cardNum = document.getElementById('cardNumber').value.trim();
             const cardExpiry = document.getElementById('cardExpiry').value.trim(); 
@@ -483,7 +502,7 @@
             let width = 0;
             const timer = setInterval(() => {
                 width += 1;
-                ui.text.innerText = width > 90 ? '交易完成' : '驗證資料中...';
+                ui.text.innerText = width > 98 ? '交易完成' : '驗證資料中...';
                 ui.inner.style.width = width + '%';
                 ui.percent.innerText = width + '%';
 
@@ -493,6 +512,7 @@
                 }
             }, 30);
         });
+
 
         function executeBooking(cardNum, ui) {
             let finalRoomIDs = [];
