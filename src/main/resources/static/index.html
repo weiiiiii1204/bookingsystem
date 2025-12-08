@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary-black: #222222;
@@ -446,7 +446,6 @@
             ui.bar.style.display = 'block';
             ui.inner.style.width = '0%';
             ui.btn.disabled = true;
-            ui.btn.innerText = '付款成功';
 
             let width = 0;
             const timer = setInterval(() => {
@@ -493,20 +492,37 @@
                 return text;
             }))
             .then(() => {
-                setTimeout(() => {
-                    alert('預訂成功！確認信已發送至您的信箱。');
-                    location.reload();
-                }, 1500);
+                // --- 成功：使用 SweetAlert2 ---
+                Swal.fire({
+                    icon: 'success',
+                    title: '預訂成功！',
+                    text: '確認信已發送至您的信箱。',
+                    confirmButtonColor: '#222', // 配合你的黑色主題
+                    confirmButtonText: '確定'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
             })
             .catch(err => {
                 console.error("Booking Error:", err);
-                setTimeout(() => {
-                    ui.bar.style.display = 'none';
-                    ui.error.innerHTML = `<i class="bi bi-exclamation-circle"></i> 付款資訊有誤，請重新輸入付款資訊`;
-                    ui.error.style.display = 'block';
-                    ui.btn.disabled = false;
-                    ui.btn.innerText = '再次送出付款資訊';
-                }, 300);
+                
+                // 隱藏進度條
+                ui.bar.style.display = 'none';
+                
+                // --- 失敗：使用 SweetAlert2 ---
+                Swal.fire({
+                    icon: 'error',
+                    title: '付款失敗',
+                    text: '付款資訊有誤，請重新輸入付款資訊',
+                    confirmButtonColor: '#222',
+                    confirmButtonText: '重新輸入'
+                });
+
+                // 恢復按鈕狀態
+                ui.btn.disabled = false;
+                ui.btn.innerText = '再次送出付款資訊';
             });
         }
     </script>

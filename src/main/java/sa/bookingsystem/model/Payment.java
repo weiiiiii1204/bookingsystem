@@ -21,8 +21,8 @@ public class Payment {
         this.paymentID = String.valueOf(++idCounter);
         this.amount = amount;
         
-        //假設隨機30%的機率會失敗
-        if (Math.random() < 0.3) {
+        //假設隨機50%的機率會失敗
+        if (Math.random() < 0.5) {
             this.isSuccessful = false;
             return; 
         }
