@@ -124,27 +124,28 @@ public class BookingSystem {
         if (!payment.returnResult()) {
             throw new RuntimeException("付款失敗，請重新輸入付款資訊");
         }
+        List<String> confirmedIDs = new ArrayList<>();
 
         // 3. 逐一建立訂單
         for (Room room : targetRooms) {
             Reservation reservation = new Reservation();
             String reservationID = String.valueOf(++reservationIDCounter);
             double totalAmount = calculateTotalAmount(room, start, end);
+            
 
             reservation.saveDetails(reservationID, room, customer, start, end, totalAmount);
             reservation.setPayment(payment); // 共用同一個付款紀錄
 
             
             allReservations.add(reservation);
-            
-            sendConfirmation(reservationID);
+            confirmedIDs.add(reservationID);
             createdReservations.add(reservation);
         }
-
+        sendConfirmation(confirmedIDs);
         return createdReservations;
     }
 
-    public void sendConfirmation(String reservationID) {
-        System.out.println("訂單確認信已發送，訂單編號: " + reservationID);
+    public void sendConfirmation(List<String> reservationIDs) {
+        System.out.println("您的訂房已確認！包含以下訂單: " + reservationIDs);
     }
 }
