@@ -9,5 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomSearchResult {
     private List<Room> availableRooms;
-    private List<Room> bookedRooms;
+    private List<Room> soldOutRooms;
 }

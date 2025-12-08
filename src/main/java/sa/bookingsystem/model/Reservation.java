@@ -27,11 +27,7 @@ public class Reservation {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.totalAmount = totalAmount;
-        this.status = "COMFIRMED";
+        this.status = "CONFIRMED";
     }
 
-
-    public void updatePaymentStatus(String status) {
-        this.status = status;
-    }
 }

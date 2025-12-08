@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 
 @Service
@@ -20,32 +22,62 @@ public class BookingSystem {
     @PostConstruct
     public void initData() {
         // 初始化假資料
-        allRooms.add(new Room("101", "標準單人房", 2000, "AVAILABLE"));
-        allRooms.add(new Room("102", "豪華雙人房", 3500, "AVAILABLE"));
-        allRooms.add(new Room("103", "海景四人房", 5000, "AVAILABLE"));
-        allRooms.add(new Room("201", "總統套房", 8800, "AVAILABLE"));
-        allRooms.add(new Room("202", "經濟雙人房", 2500, "BOOKED")); // 測試用
+        allRooms.add(new Room("101", "標準單人房", 2000));
+        allRooms.add(new Room("102", "標準雙人房", 4000));
+        allRooms.add(new Room("103", "標準單人房", 2000));
+        allRooms.add(new Room("104", "標準雙人房", 4000));
+        allRooms.add(new Room("201", "標準四人房", 7500));
+        allRooms.add(new Room("202", "標準四人房", 7500));
+        allRooms.add(new Room("203", "標準四人房", 7500));
+        allRooms.add(new Room("301", "總統套房", 10000));
+        allRooms.add(new Room("302", "總統套房", 10000));
+        allRooms.add(new Room("303", "總統套房", 10000));
     }
     private static int reservationIDCounter = 0;
 
     public RoomSearchResult searchAvailableRooms(LocalDate start, LocalDate end) {
 
         List<Room> available = new ArrayList<>();
+        
+        // 1. 遍歷每一間房間
         for (Room room : allRooms) {
-            if (room.checkAvailability(start, end)) {
+            boolean isConflict = false;
+            for (Reservation res : allReservations) {
+                // 如果訂單是這間房，且時間重疊
+                if (res.getRoom().getRoomID().equals(room.getRoomID())) {
+                    if (start.isBefore(res.getCheckOutDate()) && end.isAfter(res.getCheckInDate())) {
+                        isConflict = true; 
+                        break;
+                    }
+                }
+            }
+
+            if (!isConflict) {
                 available.add(room);
             }
         }
+        List<Room> soldOutRepresentatives = new ArrayList<>();
+        Set<String> availableTypes = new HashSet<>();
+        for (Room r : available) availableTypes.add(r.getType());
 
-        List<Room> booked = new ArrayList<>();
-        for (Room room : allRooms) {
-            if (!room.checkAvailability(start, end)) {
-                booked.add(room);
+        Set<String> allTypes = new HashSet<>();
+        for (Room r : allRooms) allTypes.add(r.getType());
+
+        for (String type : allTypes) {
+            if (!availableTypes.contains(type)) {
+                for (Room r : allRooms) {
+                    if (r.getType().equals(type)) {
+                        Room representative = new Room("SOLD_OUT", r.getType(), r.getPrice());
+                        soldOutRepresentatives.add(representative);
+                        break; 
+                    }
+                }
             }
         }
 
-        return new RoomSearchResult(available, booked);
+        return new RoomSearchResult(available,soldOutRepresentatives);
     }
+
 
     public double calculateTotalAmount(Room room, LocalDate start, LocalDate end) {
         long days = ChronoUnit.DAYS.between(start, end);
@@ -57,8 +89,7 @@ public class BookingSystem {
         List<Reservation> createdReservations = new ArrayList<>();
         List<Room> targetRooms = new ArrayList<>();
         double grandTotalAmount = 0.0;
-
-        // 第一步：驗證所有房間是否存在且可用，並計算總金額
+        // 1. 驗證房間可用性並計算總金額
         for (String roomID : roomIDs) {
             Room foundRoom = null;
             for (Room room : allRooms) {
@@ -67,27 +98,31 @@ public class BookingSystem {
                     break;
                 }
             }
+            if (foundRoom == null) throw new RuntimeException("找不到房間 ID: " + roomID);
 
-            if (foundRoom == null) {
-                throw new RuntimeException("找不到房間 ID: " + roomID);
+            boolean isConflict = false;
+            for (Reservation res : allReservations) {
+                if (res.getRoom().getRoomID().equals(roomID)) {
+                    if (start.isBefore(res.getCheckOutDate()) && end.isAfter(res.getCheckInDate())) {
+                        isConflict = true;
+                        break;
+                    }
+                }
             }
+            if (isConflict) throw new RuntimeException("房間 " + roomID + " 在此時段已被預訂");
             
-
-            if (!"AVAILABLE".equals(foundRoom.getStatus())) {
-                 throw new RuntimeException("房間 " + roomID + " 已被預訂");
-            }
 
             targetRooms.add(foundRoom);
             grandTotalAmount += calculateTotalAmount(foundRoom,start,end);
         }
 
-        // 2. 處理付款 (一次付清)
+        // 2. 處理付款
         Payment payment = new Payment();
 
         payment.processPayment(grandTotalAmount,paymentDetails);
         
         if (!payment.returnResult()) {
-            throw new RuntimeException("付款失敗");
+            throw new RuntimeException("付款失敗，請重新輸入付款資訊");
         }
 
         // 3. 逐一建立訂單
@@ -98,9 +133,7 @@ public class BookingSystem {
 
             reservation.saveDetails(reservationID, room, customer, start, end, totalAmount);
             reservation.setPayment(payment); // 共用同一個付款紀錄
-            reservation.updatePaymentStatus("CONFIRMED");
 
-            room.updateStatus("BOOKED"); // 更新庫存
             
             allReservations.add(reservation);
             
@@ -112,6 +145,6 @@ public class BookingSystem {
     }
 
     public void sendConfirmation(String reservationID) {
-        System.out.println(">>> System: 訂單確認信已發送，訂單編號: " + reservationID);
+        System.out.println("訂單確認信已發送，訂單編號: " + reservationID);
     }
 }
