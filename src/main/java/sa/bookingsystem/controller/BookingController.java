@@ -1,5 +1,7 @@
 package sa.bookingsystem.controller;
 
+import sa.bookingsystem.dto.BookingRequest;
+import sa.bookingsystem.dto.RoomSearchResult;
 import sa.bookingsystem.model.Customer;
 import sa.bookingsystem.model.Reservation;
 import sa.bookingsystem.service.BookingSystem;

@@ -1,4 +1,4 @@
-package sa.bookingsystem.controller;
+package sa.bookingsystem.dto;
 
 import sa.bookingsystem.model.Room;
 import lombok.Data;

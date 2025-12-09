@@ -1,7 +1,8 @@
 package sa.bookingsystem.service;
 
+import sa.bookingsystem.dto.RoomSearchResult;
 import sa.bookingsystem.model.*;
-import sa.bookingsystem.controller.RoomSearchResult;
+
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
