@@ -1,6 +1,6 @@
 package sa.bookingsystem.controller;
 
-import sa.bookingsystem.model.Customer;
+
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +9,9 @@ import java.util.List;
 public class BookingRequest {
 
     private List<String> roomIDs;
-    private Customer customer;
+    private String customerName;
+    private String customerPhone;
+    private String customerEmail;
     private LocalDate checkIn;
     private LocalDate checkOut;
     private String paymentDetails;
