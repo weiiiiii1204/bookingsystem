@@ -20,7 +20,7 @@ public class Payment {
 
         this.paymentID = String.valueOf(++idCounter);
         this.amount = amount;
-        
+        this.method = "Credit Card";
         //假設隨機50%的機率會失敗
         if (Math.random() < 0.5) {
             this.isSuccessful = false;
@@ -32,9 +32,5 @@ public class Payment {
         } else {
             this.isSuccessful = false;
         }
-    }
-
-    public boolean returnResult() {
-        return this.isSuccessful;
     }
 }

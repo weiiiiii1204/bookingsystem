@@ -121,25 +121,33 @@ public class BookingSystem {
 
         payment.processPayment(grandTotalAmount,paymentDetails);
         
-        if (!payment.returnResult()) {
+        if (!payment.isSuccessful()) {
             throw new RuntimeException("付款失敗，請重新輸入付款資訊");
         }
         List<String> confirmedIDs = new ArrayList<>();
 
         // 3. 逐一建立訂單
         for (Room room : targetRooms) {
-            Reservation reservation = new Reservation();
             String reservationID = String.valueOf(++reservationIDCounter);
             double totalAmount = calculateTotalAmount(room, start, end);
-            
+            Reservation reservation = new Reservation(
+                reservationID,
+                start,
+                end,
+                totalAmount,
+                "CONFIRMED",
+                room,
+                customer,
+                payment
+            );
 
-            reservation.saveDetails(reservationID, room, customer, start, end, totalAmount);
-            reservation.setPayment(payment); // 共用同一個付款紀錄
+            
 
             
             allReservations.add(reservation);
             confirmedIDs.add(reservationID);
             createdReservations.add(reservation);
+            System.out.println("【系統日誌】已存入訂單: " + reservation);
         }
         sendConfirmation(confirmedIDs);
         return createdReservations;
