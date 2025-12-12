@@ -5,7 +5,7 @@
 。
 ## 🛠 技術堆疊
 
-後端框架: Spring Boot 4.0.0
+後端框架: Spring Boot 3.5.8
 
 語言: Java 21
 
@@ -57,15 +57,27 @@ cd bookingsystem
 ## 📂 專案結構 (Project Structure)
 ```bash
 src/main/java/sa/bookingsystem/
-├── controller/       # API 接口層 (BookingController)
-├── service/          # 業務邏輯層 (BookingSystem - 負責搜尋、計算金額)
-├── model/            # 資料模型 (Room, Reservation, Customer, Payment)
-├── repository/       # 資料存取層 (MockDataStore - 模擬資料庫)
+├── controller/               # API 接口層 (接收前端 Fetch 請求)
+│   └── BookingController.java
+├── dto/                      # 資料傳輸物件 (API request/response 格式)
+│   ├── BookingRequest.java
+│   └── RoomSearchResult.java
+├── model/                    # 資料模型 (Room, Reservation, Customer, Payment)
+│   ├── Room.java            
+│   ├── Reservation.java
+│   ├── Customer.java
+│   └── Payment.java
+├── service/                  # 業務邏輯層 (處理複雜運算、判斷)
+│   └── BookingSystem.java
 └── BookingsystemApplication.java  # 程式進入點
 
 src/main/resources/
-├── static/           # 前端檔案 (index.html, css, js)
-└── application.properties # 設定檔
+├── static/                   # 靜態資源 (圖片/HTML/CSS/JS)
+│   ├── images
+│   ├── index.html
+│   ├── style.css
+│   └── script.js             
+└── application.properties    # 設定檔 
 ```
 
 ## 📡 API 文件 (API Documentation)
