@@ -1,496 +1,148 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>No.17 White Hotel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No.17 White Hotel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand justify-content-center">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#">首頁</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">房型</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">關於我們</a></li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" onclick="Swal.fire({icon:'info', title:'功能開發中', text:'訂單查詢功能敬請期待！', confirmButtonColor:'#222'})">訂單紀錄</a>
-            </li>
-        </ul>
-    </nav>
+  <nav class="navbar navbar-expand justify-content-center">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="#">首頁</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">房型</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">關於我們</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="Swal.fire({icon:'info',title:'功能開發中',text:'訂單查詢功能敬請期待！',confirmButtonColor:'#222'})">訂單紀錄</a>
+      </li>
+    </ul>
+  </nav>
 
-    <header class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-content container">
-            <div class="brand-logo">
-                <span class="prefix">No.</span>
-                <span class="number">17</span>
-                <span class="text">White Hotel</span>
-            </div>
-            <form id="searchForm">
-                <div class="search-bar-container">
-                    <div class="date-input-group">
-                        <label class="form-label">入住日期 — 退房日期</label>
-                        <input type="text" id="dateRange" class="custom-date-input" placeholder="選擇日期">
-                    </div>
-                    <button type="submit" class="btn btn-search">搜尋</button>
-                </div>
-            </form>
+  <header class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content container">
+      <div class="brand-logo">
+        <span class="prefix">No.</span><span class="number">17</span><span class="text">White Hotel</span>
+      </div>
+      <form id="searchForm">
+        <div class="search-bar-container">
+          <div class="date-input-group">
+            <label class="form-label">入住日期 — 退房日期</label>
+            <input id="dateRange" class="custom-date-input" placeholder="選擇日期">
+          </div>
+          <button type="submit" class="btn btn-search">搜尋</button>
         </div>
-    </header>
-
-    <section id="room-section">
-        <div class="container">
-            <div class="section-header">
-                <h3>選擇房型及數量</h3>
-            </div>
-            <div id="room-list-container" class="row"></div>
-        </div>
-    </section>
-
-    <div id="checkout-bar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="checkout-info">
-                已選擇 : <span id="bar-count" class="fw-bold">0</span> 間房
-                <span class="mx-2">|</span> 
-                總金額 : <span id="bar-total" class="fw-bold">NT$0</span>
-            </div>
-            <button class="btn btn-checkout" onclick="openBookingModal()">立即預訂</button>
-        </div>
+      </form>
     </div>
+  </header>
 
-    <div class="modal fade" id="bookingModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-xl"> 
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row g-0">
-                        <div class="col-md-4 booking-summary-col">
-                            <h4 class="summary-title mb-4">您的入住日期</h4>
-                            <div class="summary-dates mb-4" id="modal-dates"></div>
-                            <h5 class="fw-bold mb-3" style="font-family: 'Playfair Display', serif;">選擇房型及數量</h5>
-                            <div id="modal-room-list" class="mb-4 small text-muted"></div>
-                            <div class="border-top pt-3 d-flex justify-content-between align-items-end">
-                                <span class="text-muted">總金額 </span>
-                                <span id="modal-price" class="summary-total">$0</span>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-8 booking-form-col">
-                            <div class="d-flex justify-content-between mb-4">
-                                <div class="progress-steps">
-                                    <span id="step-indicator-1" class="step active">01. 訂購人資訊</span>
-                                    <span id="step-indicator-2" class="step">02. 付款</span>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()"></button>
-                            </div>
-                            
-                            <form id="bookingForm">
-                                <div id="step-1-content">
-                                    <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">訂購人資訊</h4>
-                                    <div class="mb-3">
-                                        <label class="modal-form-label">姓名</label>
-                                        <input type="text" class="form-control modal-form-input" id="customerName">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="modal-form-label">電話</label>
-                                            <input type="tel" class="form-control modal-form-input" id="customerPhone">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="modal-form-label">Email</label>
-                                            <input type="email" class="form-control modal-form-input" id="customerEmail">
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-next" onclick="goToStep2()">下一步：付款</button>
-                                </div>
-
-                                <div id="step-2-content" style="display: none;">
-                                    <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">安全付款</h4>
-                                    <div class="alert alert-light border small mb-4">
-                                        <i class="bi bi-lock-fill"></i> 付款過程安全，無卡片資訊被儲存。
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label class="modal-form-label">卡號</label>
-                                        <input type="tel" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19" inputmode="numeric">
-                                        <div id="payment-error" class="error-msg"></div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6 mb-3">
-                                            <label class="modal-form-label">卡片到期日</label>
-                                            <input type="tel" class="form-control modal-form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" >
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <label class="modal-form-label">安全碼 (CVV)</label>
-                                            <input type="tel" class="form-control modal-form-input" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric">
-                                        </div>
-                                    </div>
-
-                                    <div id="payment-processing" class="mb-4" style="display: none;">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <small class="text-muted" id="process-text">付款處理中</small>
-                                            <small class="fw-bold" id="process-percent">0%</small>
-                                        </div>
-                                        <div class="progress">
-                                            <div id="progress-bar-inner" class="progress-bar bg-dark" role="progressbar" style="width: 0%"></div>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-confirm" id="btn-submit">送出付款資訊</button>
-                                    <button type="button" class="btn btn-prev" onclick="goToStep1()">返回訂購人資訊</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <section id="room-section">
+    <div class="container">
+      <div class="section-header"><h3>選擇房型及數量</h3></div>
+      <div id="room-list-container" class="row"></div>
     </div>
+  </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        // --- 1. 變數與設定 ---
-        const API_BASE_URL = 'http://localhost:8080/api/booking';
-        
-        let state = {
-            checkIn: null,
-            checkOut: null,
-            nights: 0,
-            roomGroups: {},    // { "房型": { price, rooms: [], isSoldOut } }
-            selections: {}     // { "房型": 數量 }
-        };
+  <div id="checkout-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="checkout-info">
+        已選擇 : <span id="bar-count" class="fw-bold">0</span> 間房 <span class="mx-2">|</span> 
+        總金額 : <span id="bar-total" class="fw-bold">NT$0</span>
+      </div>
+      <button class="btn btn-checkout" onclick="openBookingModal()">立即預訂</button>
+    </div>
+  </div>
 
-        flatpickr("#dateRange", {
-            mode: "range",
-            minDate: "today",
-            dateFormat: "Y-m-d",
-            showMonths: 1
-        });
-
-        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-
-        // --- 2. 搜尋功能 ---
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const dateStr = document.getElementById('dateRange').value;
-            if (!dateStr.includes(" to ")) { 
-                Swal.fire({
-                icon: 'warning',
-                title: '日期未選擇',
-                text: '請選擇有效的入住與退房日期範圍',
-                confirmButtonColor: '#222'
-             });
-            return; 
-        }
-
-            const [start, end] = dateStr.split(" to ");
-            state.checkIn = start;
-            state.checkOut = end;
-            state.nights = Math.max(1, Math.ceil((new Date(end) - new Date(start)) / (86400000)));
-
-            fetch(`${API_BASE_URL}/rooms?checkIn=${start}&checkOut=${end}`)
-                .then(res => res.json())
-                .then(data => {
-                    processRoomData(data.availableRooms || [], data.soldOutRooms || []);
-                    updateUI();
-                })
-                .catch(err => { 
-                    console.error(err); 
-                    Swal.fire({
-                        icon: 'error',
-                        title: '連線錯誤',
-                        text: '系統暫時無法回應，請稍後再試。',
-                        confirmButtonColor: '#222'
-                    });
-                });
-        });
-
-        // --- 3. 資料處理 ---
-        function processRoomData(available, soldOut) {
-            state.roomGroups = {}; 
-            state.selections = {};
-
-            // 整理可用房間
-            available.forEach(room => {
-                if (!state.roomGroups[room.type]) {
-                    state.roomGroups[room.type] = { price: room.price, rooms: [], isSoldOut: false };
-                }
-                state.roomGroups[room.type].rooms.push(room);
-            });
-
-            // 整理已售完房間
-            soldOut.forEach(room => {
-                if (!state.roomGroups[room.type]) {
-                    state.roomGroups[room.type] = { price: room.price, rooms: [], isSoldOut: true };
-                }
-            });
-        }
-
-        function updateUI() {
-            const container = document.getElementById('room-list-container');
-            container.innerHTML = '';
+  <div class="modal fade" id="bookingModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-xl"> 
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="row g-0">
+            <div class="col-md-4 booking-summary-col">
+              <h4 class="summary-title mb-4">您的入住日期</h4>
+              <div class="summary-dates mb-4" id="modal-dates"></div>
+              <h5 class="fw-bold mb-3" style="font-family: 'Playfair Display', serif;">選擇房型及數量</h5>
+              <div id="modal-room-list" class="mb-4 small text-muted"></div>
+              <div class="border-top pt-3 d-flex justify-content-between align-items-end">
+                <span class="text-muted">總金額 </span><span id="modal-price" class="summary-total">$0</span>
+              </div>
+            </div>
             
-            const types = Object.keys(state.roomGroups);
-            if (types.length === 0) {
-                container.innerHTML = '<div class="col-12 text-center py-5">No rooms available.</div>';
-                return;
-            }
-
-            types.forEach(type => renderRoomCard(type, state.roomGroups[type], container));
-            
-            document.getElementById('room-section').style.display = 'block';
-            document.getElementById('room-section').scrollIntoView({ behavior: 'smooth' });
-            updateCheckoutBar();
-        }
-
-        // --- 4. 畫面渲染 ---
-        function renderRoomCard(type, group, container) {
-            const availableCount = group.rooms.length;
-            const isSoldOut = group.isSoldOut || availableCount === 0;
-            const roomImages = {
-                '標準單人房': '/images/single.jpg',
-                '標準雙人房': '/images/double.jpg',
-                '標準四人房': '/images/family.png',
-                '總統套房':   '/images/fancy.jpg'
-            };
-            const imgUrl = roomImages[type] || '/images/1.jpg';
-
-            let options = `<option value="0">選擇數量</option>`;
-            for(let i=1; i<=availableCount; i++) options += `<option value="${i}">${i}</option>`;
-
-            const html = `
-                <div class="col-lg-4 col-md-6">
-                    <div class="room-card ${isSoldOut ? 'sold-out' : ''}">
-                        <div class="room-img-wrapper"><img src="${imgUrl}" class="room-img" alt="${type}"></div>
-                        <div class="room-content">
-                            <div class="d-flex justify-content-between align-items-baseline mb-2">
-                                <h5 class="room-title">${type}</h5>
-                                <span class="room-price-tag">NT$${group.price}</span>
-                            </div>
-                            <ul class="amenities-list"><li><i class="bi bi-wifi"></i> Wifi</li><li><i class="bi bi-cup-hot"></i> 早餐</li></ul>
-                            <div class="mt-3">
-                                <label class="small text-muted mb-1 fw-bold">剩餘數量 : ${availableCount} </label>
-                                <select class="room-quantity-select" ${isSoldOut ? 'disabled' : ''} onchange="updateSelection('${type}', this.value)">
-                                    ${isSoldOut ? '<option>Sold Out</option>' : options}
-                                </select>
-                            </div>
-                        </div>
+            <div class="col-md-8 booking-form-col">
+              <div class="d-flex justify-content-between mb-4">
+                <div class="progress-steps">
+                  <span id="step-indicator-1" class="step active">01. 訂購人資訊</span>
+                  <span id="step-indicator-2" class="step">02. 付款</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()"></button>
+              </div>
+              
+              <form id="bookingForm">
+                <div id="step-1-content">
+                  <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">訂購人資訊</h4>
+                  <div class="mb-3">
+                    <label class="modal-form-label">姓名</label>
+                    <input class="form-control modal-form-input" id="customerName">
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="modal-form-label">電話</label>
+                      <input type="tel" class="form-control modal-form-input" id="customerPhone">
                     </div>
-                </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-        }
+                    <div class="col-md-6 mb-3">
+                      <label class="modal-form-label">Email</label>
+                      <input type="email" class="form-control modal-form-input" id="customerEmail">
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-next" onclick="goToStep2()">下一步：付款</button>
+                </div>
 
-        // --- 5. 互動邏輯 ---
-        window.updateSelection = function(type, count) {
-            const qty = parseInt(count);
-            if (qty > 0) state.selections[type] = qty;
-            else delete state.selections[type];
-            updateCheckoutBar();
-        };
+                <div id="step-2-content" style="display: none;">
+                  <h4 class="fw-bold mb-4" style="font-family: 'Playfair Display', serif;">安全付款</h4>
+                  <div class="alert alert-light border small mb-4">
+                    <i class="bi bi-lock-fill"></i> 付款過程安全，無卡片資訊被儲存。
+                  </div>
+                  <div class="mb-3">
+                    <label class="modal-form-label">卡號</label>
+                    <input type="tel" class="form-control modal-form-input" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" maxlength="19" inputmode="numeric">
+                    <div id="payment-error" class="error-msg"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label class="modal-form-label">卡片到期日</label>
+                      <input type="tel" class="form-control modal-form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label class="modal-form-label">安全碼 (CVV)</label>
+                      <input type="tel" class="form-control modal-form-input" id="cardCvv" placeholder="123" maxlength="3" inputmode="numeric">
+                    </div>
+                  </div>
+                  <div id="payment-processing" class="mb-4" style="display: none;">
+                    <div class="d-flex justify-content-between mb-1">
+                      <small class="text-muted" id="process-text">付款處理中</small>
+                      <small class="fw-bold" id="process-percent">0%</small>
+                    </div>
+                    <div class="progress"><div id="progress-bar-inner" class="progress-bar bg-dark" style="width: 0%"></div></div>
+                  </div>
+                  <button type="submit" class="btn btn-confirm" id="btn-submit">送出付款資訊</button>
+                  <button type="button" class="btn btn-prev" onclick="goToStep1()">返回訂購人資訊</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function updateCheckoutBar() {
-            const bar = document.getElementById('checkout-bar');
-            let totalRooms = 0;
-            let grandTotal = 0;
-
-            for (const [type, count] of Object.entries(state.selections)) {
-                if (state.roomGroups[type]) {
-                    totalRooms += count;
-                    grandTotal += (state.roomGroups[type].price * count * state.nights);
-                }
-            }
-
-            if (totalRooms > 0) {
-                bar.style.display = 'flex';
-                document.getElementById('bar-count').innerText = totalRooms;
-                document.getElementById('bar-total').innerText = `NT$${grandTotal}`;
-            } else {
-                bar.style.display = 'none';
-            }
-        }
-
-        // --- 6. Modal 邏輯 ---
-        window.openBookingModal = function() {
-            document.getElementById('modal-dates').innerText = `${state.checkIn} — ${state.checkOut} (共 ${state.nights} 晚)`;
-            const listDiv = document.getElementById('modal-room-list');
-            let html = '';
-            let total = 0;
-
-            for (const [type, count] of Object.entries(state.selections)) {
-                const subtotal = state.roomGroups[type].price * count * state.nights;
-                total += subtotal;
-                html += `<div class="d-flex justify-content-between border-bottom py-2"><span>${type} x ${count}</span><span>NT$${subtotal}</span></div>`;
-            }
-
-            listDiv.innerHTML = html;
-            document.getElementById('modal-price').innerText = `NT$${total}`;
-            
-            goToStep(1);
-            document.getElementById('payment-error').style.display = 'none';
-            document.getElementById('payment-processing').style.display = 'none';
-            document.getElementById('btn-submit').disabled = false;
-            document.getElementById('btn-submit').innerText = '送出付款資訊';
-            
-            bookingModal.show();
-        };
-
-        window.closeModal = () => bookingModal.hide();
-        
-        window.goToStep = function(step) {
-            if (step === 2) {
-                const inputs = ['customerName', 'customerPhone', 'customerEmail'];
-                if (inputs.some(id => !document.getElementById(id).value)) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: '資料不完整',
-                        text: '請填寫所有旅客資料（姓名、電話、Email）',
-                        confirmButtonColor: '#222'
-                    });
-                    return;
-                }
-            }
-            document.getElementById('step-1-content').style.display = step === 1 ? 'block' : 'none';
-            document.getElementById('step-2-content').style.display = step === 2 ? 'block' : 'none';
-            document.getElementById('step-indicator-1').classList.toggle('active', step === 1);
-            document.getElementById('step-indicator-2').classList.toggle('active', step === 2);
-        };
-        
-        window.goToStep1 = () => goToStep(1);
-        window.goToStep2 = () => goToStep(2);
-
-        // --- 7. 信用卡輸入格式化 (自動加空格與斜線) ---
-        document.getElementById('cardNumber').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/(.{4})/g, '$1 ').trim();
-            e.target.value = value;
-        });
-
-        document.getElementById('cardExpiry').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); 
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2);
-            }
-            e.target.value = value;
-        });
-
-        document.getElementById('cardCvv').addEventListener('input', function (e) {
-            e.target.value = e.target.value.replace(/\D/g, '');
-        });
-
-        // --- 8. 送出訂單 ---
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const cardNum = document.getElementById('cardNumber').value.trim();
-            const cardExpiry = document.getElementById('cardExpiry').value.trim(); 
-            const cardCvv = document.getElementById('cardCvv').value.trim();    
-
-            if (!cardNum || !cardExpiry || !cardCvv) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '付款資訊不完整',
-                    text: '請填寫完整的信用卡號、到期日與安全碼',
-                    confirmButtonColor: '#222'
-                });
-                return; 
-            }
-            const ui = {
-                error: document.getElementById('payment-error'),
-                bar: document.getElementById('payment-processing'),
-                inner: document.getElementById('progress-bar-inner'),
-                text: document.getElementById('process-text'),
-                percent: document.getElementById('process-percent'),
-                btn: document.getElementById('btn-submit')
-            };
-
-            ui.error.style.display = 'none';
-            ui.bar.style.display = 'block';
-            ui.inner.style.width = '0%';
-            ui.btn.disabled = true;
-
-            let width = 0;
-            const timer = setInterval(() => {
-                width += 1;
-                ui.text.innerText = width > 98 ? '交易完成' : '驗證資料中...';
-                ui.inner.style.width = width + '%';
-                ui.percent.innerText = width + '%';
-
-                if (width >= 100) {
-                    clearInterval(timer);
-                    executeBooking(cardNum, ui);
-                }
-            }, 30);
-        });
-
-
-        function executeBooking(cardNum, ui) {
-            let finalRoomIDs = [];
-            for (const [type, count] of Object.entries(state.selections)) {
-                state.roomGroups[type].rooms.slice(0, count).forEach(r => finalRoomIDs.push(r.roomID));
-            }
-
-            const req = {
-                roomIDs: finalRoomIDs,
-                checkIn: state.checkIn,
-                checkOut: state.checkOut,
-                customerName: document.getElementById('customerName').value,
-                customerPhone: document.getElementById('customerPhone').value,
-                customerEmail: document.getElementById('customerEmail').value,
-                paymentDetails: cardNum
-            };
-
-            fetch(`${API_BASE_URL}/reserve`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(req)
-            })
-            .then(res => res.text().then(text => {
-                if (!res.ok) {
-                    try { throw new Error(JSON.parse(text).message || text); } 
-                    catch (e) { throw new Error(text); }
-                }
-                return text;
-            }))
-            .then(() => {            
-                setTimeout(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '預訂成功！',
-                        text: '確認信已發送至您的信箱。',
-                        confirmButtonColor: '#222', 
-                        confirmButtonText: '確定'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-                }, 1500);
-            })
-            .catch(err => {
-                console.error("Booking Error:", err);
-                setTimeout(() => {
-                    ui.bar.style.display = 'none';
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: '付款失敗',
-                        text: '付款資訊有誤，請重新輸入付款資訊',
-                        confirmButtonColor: '#222',
-                        confirmButtonText: '重新輸入'
-                    });
-
-                    ui.btn.disabled = false;
-                    ui.btn.innerText = '再次送出付款資訊';
-                }, 300);
-            });
-        }
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="script.js"></script>
 </body>
 </html>

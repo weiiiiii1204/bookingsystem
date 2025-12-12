@@ -12,11 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
-
 @Service
 public class BookingSystem {
-
-
     private List<Room> allRooms = new ArrayList<>();
     private List<Reservation> allReservations = new ArrayList<>();
 
@@ -79,12 +76,10 @@ public class BookingSystem {
         return new RoomSearchResult(available,soldOutRepresentatives);
     }
 
-
     public double calculateTotalAmount(Room room, LocalDate start, LocalDate end) {
         long days = ChronoUnit.DAYS.between(start, end);
         return room.getPrice() * days;
     }
-
   
     public List<Reservation> createReservation(List<String> roomIDs, Customer customer, LocalDate start, LocalDate end,String paymentDetails) {
         List<Reservation> createdReservations = new ArrayList<>();
@@ -141,9 +136,6 @@ public class BookingSystem {
                 customer,
                 payment
             );
-
-            
-
             
             allReservations.add(reservation);
             confirmedIDs.add(reservationID);
