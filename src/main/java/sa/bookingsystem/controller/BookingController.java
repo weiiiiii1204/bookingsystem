@@ -1,16 +1,22 @@
 package sa.bookingsystem.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import sa.bookingsystem.dto.BookingRequest;
 import sa.bookingsystem.dto.RoomSearchResult;
 import sa.bookingsystem.model.Customer;
 import sa.bookingsystem.model.Reservation;
 import sa.bookingsystem.service.BookingSystem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/booking")
@@ -20,7 +26,6 @@ public class BookingController {
     @Autowired
     private BookingSystem bookingSystem;
 
-    // 修改: 回傳型態改為 RoomSearchResult
     @GetMapping("/rooms")
     public RoomSearchResult searchRooms(
             @RequestParam LocalDate checkIn,
@@ -28,13 +33,11 @@ public class BookingController {
         return bookingSystem.searchAvailableRooms(checkIn, checkOut);
     }
 
-    private static int CustomerIDCounter = 0;
 
-    // 修改: 接收 roomIDs 並回傳 List<Reservation>
     @PostMapping("/reserve")
     public List<Reservation> createReservation(@RequestBody BookingRequest request) {
-        String newCustomerID = String.valueOf(++CustomerIDCounter);
-        Customer customer = new Customer(newCustomerID, request.getCustomerName(),
+        
+        Customer customer = new Customer(null, request.getCustomerName(),
                 request.getCustomerPhone(), request.getCustomerEmail());
 
         return bookingSystem.createReservation(
