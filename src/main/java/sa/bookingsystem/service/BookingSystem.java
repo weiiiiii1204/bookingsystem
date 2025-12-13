@@ -90,7 +90,7 @@ public class BookingSystem {
   
     public List<Reservation> createReservation(BookingRequest request) {
         Customer customer = new Customer(
-            String.valueOf(++customerIDCounter),
+            null,   
             request.getCustomerName(),
             request.getCustomerPhone(),
             request.getCustomerEmail()
@@ -105,7 +105,7 @@ public class BookingSystem {
         LocalDate start = request.getCheckIn();
         LocalDate end = request.getCheckOut();
         String paymentDetails = request.getPaymentDetails();
-        
+
         // 1. 驗證房間可用性並計算總金額
         for (String roomID : roomIDs) {
             Room foundRoom = null;
@@ -142,6 +142,9 @@ public class BookingSystem {
         if (!payment.isSuccessful()) {
             throw new RuntimeException("付款失敗，請重新輸入付款資訊");
         }
+        
+        customer.setCustomerID(String.valueOf(++customerIDCounter));
+
         List<String> confirmedIDs = new ArrayList<>();
 
         // 3. 逐一建立訂單

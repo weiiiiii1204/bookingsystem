@@ -13,18 +13,19 @@ public class Payment {
     private String method;
     private boolean isSuccessful;
 
-    private static int idCounter = 0;
+    private static int PaymentIDCounter = 0;
 
 
     public void processPayment(double amount, String paymentDetails) {
-
-        this.paymentID = String.valueOf(++idCounter);
         this.amount = amount;
         this.method = "Credit Card";
-        //假設隨機50%的機率會失敗
+        //假設隨機50%的機率會付款失敗
         this.isSuccessful = (amount > 0);
         if (Math.random() < 0.5) {
             this.isSuccessful = false;
+        }
+        if (this.isSuccessful) {
+            this.paymentID = String.valueOf(++PaymentIDCounter);
         }
     }
 }
