@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sa.bookingsystem.dto.BookingRequest;
 import sa.bookingsystem.dto.RoomSearchResult;
-import sa.bookingsystem.model.Customer;
 import sa.bookingsystem.model.Reservation;
 import sa.bookingsystem.service.BookingSystem;
 
@@ -36,16 +35,6 @@ public class BookingController {
 
     @PostMapping("/reserve")
     public List<Reservation> createReservation(@RequestBody BookingRequest request) {
-        
-        Customer customer = new Customer(null, request.getCustomerName(),
-                request.getCustomerPhone(), request.getCustomerEmail());
-
-        return bookingSystem.createReservation(
-                request.getRoomIDs(),
-                customer,
-                request.getCheckIn(),
-                request.getCheckOut(),
-                request.getPaymentDetails()
-        );
-    }
+    return bookingSystem.createReservation(request);
+}
 }

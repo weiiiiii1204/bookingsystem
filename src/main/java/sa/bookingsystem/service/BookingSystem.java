@@ -12,6 +12,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import sa.bookingsystem.dto.BookingRequest;
 import sa.bookingsystem.dto.RoomSearchResult;
 import sa.bookingsystem.model.Customer;
 import sa.bookingsystem.model.Payment;
@@ -87,14 +88,24 @@ public class BookingSystem {
         return room.getPrice() * days;
     }
   
-    public List<Reservation> createReservation(List<String> roomIDs, Customer customer, LocalDate start, LocalDate end,String paymentDetails) {
-        customer.setCustomerID(String.valueOf(++customerIDCounter));
+    public List<Reservation> createReservation(BookingRequest request) {
+        Customer customer = new Customer(
+            String.valueOf(++customerIDCounter),
+            request.getCustomerName(),
+            request.getCustomerPhone(),
+            request.getCustomerEmail()
+        );
+
         List<Reservation> createdReservations = new ArrayList<>();
         List<Room> targetRooms = new ArrayList<>();
-
         Map<Room, Double> roomPrices = new HashMap<>();
-
         double grandTotalAmount = 0.0;
+
+        List<String> roomIDs = request.getRoomIDs();
+        LocalDate start = request.getCheckIn();
+        LocalDate end = request.getCheckOut();
+        String paymentDetails = request.getPaymentDetails();
+        
         // 1. 驗證房間可用性並計算總金額
         for (String roomID : roomIDs) {
             Room foundRoom = null;
