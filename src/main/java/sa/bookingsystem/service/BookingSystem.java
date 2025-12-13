@@ -120,7 +120,7 @@ public class BookingSystem {
             targetRooms.add(foundRoom);
             double singleRoomTotal = calculateTotalAmount(foundRoom, start, end);
             roomPrices.put(foundRoom, singleRoomTotal);
-            grandTotalAmount += calculateTotalAmount(foundRoom,start,end);
+            grandTotalAmount += singleRoomTotal;
         }
 
         // 2. 處理付款
