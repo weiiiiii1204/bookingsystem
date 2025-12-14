@@ -1,6 +1,5 @@
-// --- 1. 工具與設定 ---
 const API_URL = 'http://localhost:8080/api/booking';
-const $ = (sel) => document.querySelector(sel); // 簡化選取器
+const $ = (sel) => document.querySelector(sel); 
 const showMsg = (icon, title, text, btnText = '確定') => 
     Swal.fire({ icon, title, text, confirmButtonColor: '#222', confirmButtonText: btnText });
 
@@ -9,7 +8,7 @@ const bookingModal = new bootstrap.Modal($('#bookingModal'));
 
 flatpickr("#dateRange", { mode: "range", minDate: "today", dateFormat: "Y-m-d", showMonths: 1 });
 
-// --- 2. 搜尋與資料處理 ---
+//搜尋與資料處理
 $('#searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const dateStr = $('#dateRange').value;
@@ -67,7 +66,7 @@ function updateUI() {
     updateCheckoutBar();
 }
 
-// --- 3. 互動邏輯 ---
+// 互動邏輯
 window.updateSelection = (type, count) => {
     (parseInt(count) > 0) ? state.selections[type] = parseInt(count) : delete state.selections[type];
     updateCheckoutBar();
@@ -85,7 +84,7 @@ function updateCheckoutBar() {
     $('#bar-total').innerText = `NT$${total}`;
 }
 
-// --- 4. Modal 與步驟 ---
+//  Modal 與步驟 
 window.openBookingModal = () => {
     $('#modal-dates').innerText = `${state.checkIn} — ${state.checkOut} (共 ${state.nights} 晚)`;
     let total = 0, html = '';
@@ -122,7 +121,7 @@ function goToStep(step) {
     $('#step-indicator-2').classList.toggle('active', step === 2);
 }
 
-// --- 5. 信用卡格式化 ---
+//信用卡格式
 $('#cardNumber').oninput = e => e.target.value = e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
 $('#cardExpiry').oninput = e => {
     let v = e.target.value.replace(/\D/g, '');
@@ -131,7 +130,7 @@ $('#cardExpiry').oninput = e => {
 };
 $('#cardCvv').oninput = e => e.target.value = e.target.value.replace(/\D/g, '');
 
-// --- 6. 送出訂單 ---
+// 送出訂單
 $('#bookingForm').onsubmit = (e) => {
     e.preventDefault();
     const [num, exp, cvv] = ['#cardNumber', '#cardExpiry', '#cardCvv'].map(id => $(id).value.trim());
