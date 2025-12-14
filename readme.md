@@ -11,7 +11,7 @@
 
 建置工具: Maven
 
-前端介面: HTML5, Bootstrap 5, Vanilla JavaScript (Fetch API)
+前端介面: HTML5, Bootstrap 5, JavaScript (Fetch API)
 
 工具庫: Lombok (簡化程式碼)
 

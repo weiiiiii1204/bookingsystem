@@ -1,22 +1,30 @@
 package sa.bookingsystem.service;
 
-import sa.bookingsystem.dto.RoomSearchResult;
-import sa.bookingsystem.model.*;
-
-import org.springframework.stereotype.Service;
-import jakarta.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+import sa.bookingsystem.dto.BookingRequest;
+import sa.bookingsystem.dto.RoomSearchResult;
+import sa.bookingsystem.model.Customer;
+import sa.bookingsystem.model.Payment;
+import sa.bookingsystem.model.Reservation;
+import sa.bookingsystem.model.Room;
 
 @Service
 public class BookingSystem {
-    private List<Room> allRooms = new ArrayList<>();
-    private List<Reservation> allReservations = new ArrayList<>();
-
+    private final List<Room> allRooms = new ArrayList<>();
+    private final List<Reservation> allReservations = new ArrayList<>();
+    private static int reservationIDCounter = 0;
+    private static int customerIDCounter = 0;
     @PostConstruct
     public void initData() {
         // 初始化假資料
@@ -31,7 +39,6 @@ public class BookingSystem {
         allRooms.add(new Room("302", "總統套房", 10000));
         allRooms.add(new Room("303", "總統套房", 10000));
     }
-    private static int reservationIDCounter = 0;
 
     public RoomSearchResult searchAvailableRooms(LocalDate start, LocalDate end) {
 
@@ -81,10 +88,24 @@ public class BookingSystem {
         return room.getPrice() * days;
     }
   
-    public List<Reservation> createReservation(List<String> roomIDs, Customer customer, LocalDate start, LocalDate end,String paymentDetails) {
+    public List<Reservation> createReservation(BookingRequest request) {
+        Customer customer = new Customer(
+            null,   
+            request.getCustomerName(),
+            request.getCustomerPhone(),
+            request.getCustomerEmail()
+        );
+
         List<Reservation> createdReservations = new ArrayList<>();
         List<Room> targetRooms = new ArrayList<>();
+        Map<Room, Double> roomPrices = new HashMap<>();
         double grandTotalAmount = 0.0;
+
+        List<String> roomIDs = request.getRoomIDs();
+        LocalDate start = request.getCheckIn();
+        LocalDate end = request.getCheckOut();
+        String paymentDetails = request.getPaymentDetails();
+
         // 1. 驗證房間可用性並計算總金額
         for (String roomID : roomIDs) {
             Room foundRoom = null;
@@ -107,9 +128,10 @@ public class BookingSystem {
             }
             if (isConflict) throw new RuntimeException("房間 " + roomID + " 在此時段已被預訂");
             
-
             targetRooms.add(foundRoom);
-            grandTotalAmount += calculateTotalAmount(foundRoom,start,end);
+            double singleRoomTotal = calculateTotalAmount(foundRoom, start, end);
+            roomPrices.put(foundRoom, singleRoomTotal);
+            grandTotalAmount += singleRoomTotal;
         }
 
         // 2. 處理付款
@@ -120,12 +142,15 @@ public class BookingSystem {
         if (!payment.isSuccessful()) {
             throw new RuntimeException("付款失敗，請重新輸入付款資訊");
         }
+        
+        customer.setCustomerID(String.valueOf(++customerIDCounter));
+
         List<String> confirmedIDs = new ArrayList<>();
 
         // 3. 逐一建立訂單
         for (Room room : targetRooms) {
             String reservationID = String.valueOf(++reservationIDCounter);
-            double totalAmount = calculateTotalAmount(room, start, end);
+            double totalAmount = roomPrices.get(room);
             Reservation reservation = new Reservation(
                 reservationID,
                 start,
