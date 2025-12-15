@@ -66,7 +66,7 @@ function updateUI() {
     updateCheckoutBar();
 }
 
-// 互動邏輯
+// 購物車金額計算與更新
 window.updateSelection = (type, count) => {
     (parseInt(count) > 0) ? state.selections[type] = parseInt(count) : delete state.selections[type];
     updateCheckoutBar();
@@ -84,7 +84,7 @@ function updateCheckoutBar() {
     $('#bar-total').innerText = `NT$${total}`;
 }
 
-//  Modal 與步驟 
+// 填寫資料的視窗 
 window.openBookingModal = () => {
     $('#modal-dates').innerText = `${state.checkIn} — ${state.checkOut} (共 ${state.nights} 晚)`;
     let total = 0, html = '';
@@ -98,7 +98,7 @@ window.openBookingModal = () => {
     $('#modal-room-list').innerHTML = html;
     $('#modal-price').innerText = `NT$${total}`;
     
-    // 重置 Modal 狀態
+    // 重置視窗內資料
     goToStep(1);
     $('#payment-error').style.display = 'none';
     $('#payment-processing').style.display = 'none';
